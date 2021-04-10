@@ -11,7 +11,7 @@ const About = () => {
             <strong>Counter</strong> and <strong>Timer</strong> widgets.
           </p>
           <p>
-            Crafted with <span className="text-red-400">♥</span> by Book.
+            Crafted with <span className="text-red-400">♥</span> by Win.
           </p>
         </div>
       </div>
