@@ -5,7 +5,6 @@ const Counter = () => {
   const [num, setNum] = useState(0);
   let disabled = false;
   if (num === 0) disabled = true;
-  console.log(num);
   return (
     <div className="text-center">
       <div className="flex items-center justify-center mt-4 mb-6">
