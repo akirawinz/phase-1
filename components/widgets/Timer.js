@@ -16,7 +16,6 @@ const Timer = () => {
   }, [isActive]);
 
   const getMinSecond = () => {
-    // const miSec = Math.floor((time / 10) % 100);
     const miSec = calculateTime(10, 100);
     const second = calculateTime(1000, 60);
     const minute = calculateTime(60000, 60);
