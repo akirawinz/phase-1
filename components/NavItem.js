@@ -3,33 +3,17 @@ import classNames from 'classnames';
 import { useRouter } from 'next/router';
 const NavItem = ({ url, title }) => {
   const router = useRouter();
-  const btnClassActive = classNames(
-    ' inline-block',
-    'px-4',
-    'py-1',
-    'mr-1.5',
-    'rounded-lg',
-    'bg-blue-500',
-    'text-white'
-  );
-  const btnClassNotActive = classNames(
-    ' inline-block',
-    'px-4',
-    'py-1',
-    'mr-1.5',
-    'rounded-lg',
-    'text-blue-500'
-  );
   let btnClass;
   if (router.pathname === url) {
-    btnClass = btnClassActive;
+    btnClass = classNames('bg-blue-500', 'text-white');
   } else {
-    btnClass = btnClassNotActive;
+    btnClass = classNames('text-blue-500');
   }
-
   return (
     <Link href={url}>
-      <a className={btnClass}>{title}</a>
+      <a className={`"inline-block px-4 py-1 mr-1.5 rounded-lg " ${btnClass}`}>
+        {title}
+      </a>
     </Link>
   );
 };

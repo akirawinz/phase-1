@@ -1,19 +1,14 @@
 import Button from '../Button';
+import PolarButton from '../PolarButton';
 const Counter = () => {
-  const resetBtnStyled =
-    'text-white focus:outline-none px-4 py-1 rounded-md bg-gray-300';
-  const addBtnStyled =
-    'text-5xl rounded-full w-10 text-center focus:outline-none text-blue-500';
-  const minusBtnStyled =
-    'text-5xl rounded-full w-10 text-center focus:outline-none text-gray-300';
   return (
     <div className="text-center">
       <div className="flex items-center justify-center mt-4 mb-6">
-        <Button btnStyled={minusBtnStyled}>-</Button>
+        <PolarButton color="gray">-</PolarButton>
         <div className="text-6xl mx-7">0</div>
-        <Button btnStyled={addBtnStyled}>+</Button>
+        <PolarButton color="blue">+</PolarButton>
       </div>
-      <Button btnStyled={resetBtnStyled}>Reset</Button>
+      <Button disabled={true}>Reset</Button>
     </div>
   );
 };
