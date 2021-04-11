@@ -9,18 +9,25 @@ const Timer = () => {
     let interval;
     if (isActive) {
       interval = setInterval(() => {
-        setTime((prevTime) => prevTime + 1);
-      }, 1000);
+        setTime((prevTime) => prevTime + 10);
+      }, 10);
     }
     return () => clearInterval(interval);
   }, [isActive]);
 
   const getMinSecond = () => {
-    const second = time % 60;
-    const minute = Math.floor(second / 60);
+    // const miSec = Math.floor((time / 10) % 100);
+    const miSec = calculateTime(10, 100);
+    const second = calculateTime(1000, 60);
+    const minute = calculateTime(60000, 60);
     let computedSecond = computedTime(second);
     let computedMinute = computedTime(minute);
-    return computedMinute + ':' + computedSecond;
+    let computedMiliSec = computedTime(miSec);
+    return computedMinute + ':' + computedSecond + ':' + computedMiliSec;
+  };
+
+  const calculateTime = (ts, mod) => {
+    return Math.floor(time / ts) % mod;
   };
 
   const computedTime = (getTime) => {
