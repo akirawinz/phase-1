@@ -19,9 +19,9 @@ const Timer = () => {
     const miSec = calculateTime(10, 100);
     const second = calculateTime(1000, 60);
     const minute = calculateTime(60000, 60);
-    let computedSecond = computedTime(second);
-    let computedMinute = computedTime(minute);
-    let computedMiliSec = computedTime(miSec);
+    const computedSecond = computedTime(second);
+    const computedMinute = computedTime(minute);
+    const computedMiliSec = computedTime(miSec);
     return computedMinute + ':' + computedSecond + ':' + computedMiliSec;
   };
 
