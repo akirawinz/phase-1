@@ -8,7 +8,7 @@ const Button = ({ children, disabled = false, onClick = () => {} }) => {
     }
   );
   return (
-    <button className={styled} onClick={onClick}>
+    <button className={styled} onClick={onClick} disabled={disabled}>
       {children}
     </button>
   );
