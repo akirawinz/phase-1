@@ -57,15 +57,7 @@ const Home = () => {
   };
 
   const getTimer = () => {
-    let id;
-    if (timerWidgets.length === 0) {
-      id = 1;
-    } else {
-      const getLastArrId = [...timerWidgets].pop().id;
-      id = getLastArrId + 1;
-    }
-
-    const getData = getJson(counterWidgets);
+    const getData = getJson(timerWidgets);
     setTimerWidgets([...timerWidgets, getData]);
     setShowModal(false);
   };
