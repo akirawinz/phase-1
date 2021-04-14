@@ -133,16 +133,7 @@ const Home = () => {
       const sort = listAllWidgets.sort((a, b) => {
         return b.id - a.id;
       });
-
-      // setListAllWidgets(listAllWidgets.sort((a, b) => a.id - b.id));
-      return (
-        <>
-          {/* <JustSayList justSayWidgets={justSayWidgets} />
-          <CounterList counterWidgets={counterWidgets} getTimer={getTimer} />
-          <TimerList timerWidgets={timerWidgets} /> */}
-          <ListAllWidget getAllListWidgets={sort} />
-        </>
-      );
+      return <ListAllWidget getAllListWidgets={sort} />;
     } else {
       return (
         <Card>
