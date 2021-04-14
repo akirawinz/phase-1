@@ -38,8 +38,6 @@ const Home = () => {
   }, [timerWidgets]);
   useEffect(() => {}, [initialWidget]);
 
-  // const { justSayValidate, handleSubmit, errors } = useForm();
-
   const openModal = (modalType) => () => {
     if (modalType === 'modal') {
       setShowModal(true);
