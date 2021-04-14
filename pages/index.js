@@ -13,29 +13,22 @@ import CounterList from '../components/widgets/CounterList';
 import TimerList from '../components/widgets/TimerList';
 import Card from '../components/template/Card';
 import Form from '../components/Form';
+import ListAllWidget from '../components/widgets/ListAllWidget';
 
 const Home = () => {
   const [error, setError] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [showModalJustSay, setShowModalJustSay] = useState(false);
+  const [listAllWidgets, setListAllWidgets] = useState([]);
   const [showModalCounter, setShowModalCounter] = useState(false);
-  const [justSayWidgets, setJustSayWidgets] = useState([]);
-  const [counterWidgets, setCounterWidgets] = useState([]);
-  const [timerWidgets, setTimerWidgets] = useState([]);
+
   const [initialWidget, setInitialWidget] = useState(true);
   const iconClass = 'text-4xl mx-auto';
 
   useEffect(() => {
-    if (justSayWidgets.length > 0) setInitialWidget(false);
-  }, [justSayWidgets]);
+    if (listAllWidgets.length > 0) setInitialWidget(false);
+  }, [listAllWidgets]);
 
-  useEffect(() => {
-    if (counterWidgets.length > 0) setInitialWidget(false);
-  }, [counterWidgets]);
-
-  useEffect(() => {
-    if (timerWidgets.length > 0) setInitialWidget(false);
-  }, [timerWidgets]);
   useEffect(() => {}, [initialWidget]);
 
   const openModal = (modalType) => () => {
@@ -55,17 +48,17 @@ const Home = () => {
   };
 
   const getTimer = () => {
-    const getData = getJson(timerWidgets);
-    setTimerWidgets([...timerWidgets, getData]);
+    const getData = getJson(listAllWidgets, '', 'timer');
+    setListAllWidgets([...listAllWidgets, getData]);
     setShowModal(false);
   };
 
-  const getJson = (data, value = '') => {
+  const getJson = (data, value = '', type) => {
     let id;
     if (data.length === 0) {
       id = 1;
     } else {
-      const getLastArrId = [...data].pop().id;
+      const getLastArrId = data[0].id;
       id = getLastArrId + 1;
     }
     return {
@@ -83,6 +76,7 @@ const Home = () => {
             second: 'numeric',
           })
           .toString(),
+      type,
     };
   };
 
@@ -92,8 +86,8 @@ const Home = () => {
     if (trim < 3) {
       setError('Please enter at least 3 characters.');
     } else {
-      const getData = getJson(justSayWidgets, e.target.title.value);
-      setJustSayWidgets([...justSayWidgets, getData]);
+      const getData = getJson(listAllWidgets, e.target.title.value, 'justSay');
+      setListAllWidgets([...listAllWidgets, getData]);
       setShowModalJustSay(false);
       setError('');
     }
@@ -107,8 +101,8 @@ const Home = () => {
       setError('Please provide some value.');
     } else {
       setError('');
-      const getData = getJson(counterWidgets, e.target.num.value);
-      setCounterWidgets([...counterWidgets, getData]);
+      const getData = getJson(listAllWidgets, e.target.num.value, 'counter');
+      setListAllWidgets([...listAllWidgets, getData]);
       setShowModalCounter(false);
     }
   };
@@ -134,18 +128,22 @@ const Home = () => {
     setShowModal(false);
     setShowModalJustSay(false);
     setShowModalCounter(false);
-    setJustSayWidgets([]);
-    setCounterWidgets([]);
-    setTimerWidgets([]);
     setInitialWidget(true);
+    setListAllWidgets([]);
   };
   const handleWidgets = () => {
     if (!initialWidget) {
+      const sort = listAllWidgets.sort((a, b) => {
+        return b.id - a.id;
+      });
+
+      // setListAllWidgets(listAllWidgets.sort((a, b) => a.id - b.id));
       return (
         <>
-          <JustSayList justSayWidgets={justSayWidgets} />
+          {/* <JustSayList justSayWidgets={justSayWidgets} />
           <CounterList counterWidgets={counterWidgets} getTimer={getTimer} />
-          <TimerList timerWidgets={timerWidgets} />
+          <TimerList timerWidgets={timerWidgets} /> */}
+          <ListAllWidget getAllListWidgets={sort} />
         </>
       );
     } else {
