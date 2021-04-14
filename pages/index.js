@@ -62,7 +62,7 @@ const Home = () => {
     setShowModal(false);
   };
 
-  const getJson = (data, value) => {
+  const getJson = (data, value = '') => {
     let id;
     if (data.length === 0) {
       id = 1;
@@ -90,7 +90,8 @@ const Home = () => {
 
   const handleFormJustSay = (e) => {
     e.preventDefault();
-    if (e.target.title.value.length < 3) {
+    const trim = e.target.title.value.trim().length;
+    if (trim < 3) {
       setError('Please enter at least 3 characters.');
     } else {
       const getData = getJson(justSayWidgets, e.target.title.value);
@@ -211,7 +212,7 @@ const Home = () => {
           </Modal>
           <Modal
             show={showModalJustSay}
-            title={'Add widget'}
+            title={'Add JustSay'}
             onCancel={() => setShowModalJustSay(false)}
           >
             <Form onSubmit={handleFormJustSay} error={error}>
@@ -238,7 +239,7 @@ const Home = () => {
             </Form>
           </Modal>
         </div>
-        <div className="flex md:flex-wrap">{handleWidgets()}</div>
+        <div className="md:flex md:flex-wrap md:-mr-4">{handleWidgets()}</div>
       </div>
     </>
   );
