@@ -43,6 +43,7 @@ const Timer = () => {
     setIsActive(!isActive);
     setDisabled(false);
   };
+
   return (
     <>
       <div className="text-center">

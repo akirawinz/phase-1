@@ -1,10 +1,12 @@
 import Button from '../Button';
 import { useState } from 'react';
 import PolarButton from '../PolarButton';
-const Counter = () => {
-  const [num, setNum] = useState(0);
+const Counter = ({ getNum }) => {
+  const [num, setNum] = useState(getNum);
+  console.log(getNum);
   let disabled = false;
-  if (num === 0) disabled = true;
+  if (num === 0 || getNum == 0) disabled = true;
+  console.log(disabled);
   return (
     <div className="text-center">
       <div className="flex items-center justify-center mt-4 mb-6">
