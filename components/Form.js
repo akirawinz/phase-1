@@ -1,7 +1,9 @@
 import Button from '../components/Button';
 const Form = ({
-  children,
   error,
+  type,
+  name,
+  placeHolder = '',
   onSubmit = (e) => {
     e.preventDefault;
   },
@@ -9,7 +11,12 @@ const Form = ({
   return (
     <>
       <form className="flex" onSubmit={onSubmit}>
-        {children}
+        <input
+          type={type}
+          name={name}
+          placeholder={placeHolder}
+          className="w-full px-2.5 py-1 focus:outline-none rounded-md"
+        />
         &nbsp;
         <Button> Add</Button>
       </form>

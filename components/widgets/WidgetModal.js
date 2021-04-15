@@ -1,6 +1,3 @@
-import { AiOutlineMessage } from 'react-icons/ai';
-import { RiIncreaseDecreaseLine } from 'react-icons/ri';
-import { IoTimerOutline } from 'react-icons/io5';
 const WidgetModal = ({ children, title, onClick = () => {} }) => {
   return (
     <>
