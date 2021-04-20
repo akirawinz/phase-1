@@ -1,11 +1,16 @@
 import Button from '../Button';
 import { useEffect, useState } from 'react';
 import PolarButton from '../PolarButton';
-const Counter = ({ getNum }) => {
+const Counter = ({ getNum, zero }) => {
   const [num, setNum] = useState(getNum);
   let disabled = false;
   if (num === 0 || getNum === 0) disabled = true;
-  useEffect(() => {}, [num]);
+  useEffect(() => {
+    setNum(Number(getNum));
+  }, [getNum]);
+  useEffect(() => {
+    if (zero === 'counter') setNum(0);
+  }, [zero]);
   return (
     <div className="text-center">
       <div className="flex items-center justify-center mt-4 mb-6">
@@ -16,9 +21,7 @@ const Counter = ({ getNum }) => {
         >
           -
         </PolarButton>
-        <div className="text-6xl mx-7">
-          {num} : {getNum}
-        </div>
+        <div className="text-6xl mx-7">{num}</div>
         <PolarButton color="blue" onClick={() => setNum(num + 1)}>
           +
         </PolarButton>

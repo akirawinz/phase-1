@@ -1,10 +1,12 @@
 import Button from '../Button';
 import { useEffect, useState } from 'react';
+import getMinSecond from '../../helpers/calculateTime';
 
-const Timer = () => {
+const Timer = ({ listAllWidgets, list, setListAllWidgets, zero }) => {
   const [time, setTime] = useState(0);
   const [isActive, setIsActive] = useState(false);
   const [disabled, setDisabled] = useState(true);
+
   useEffect(() => {
     let interval;
     if (isActive) {
@@ -12,26 +14,24 @@ const Timer = () => {
         setTime((prevTime) => prevTime + 10);
       }, 10);
     }
-    return () => clearInterval(interval);
+    const mapData = listAllWidgets.map((data) => {
+      if (data.id === list.id) {
+        return { ...data, value: time };
+      } else {
+        return data;
+      }
+    });
+    setListAllWidgets(mapData);
+    return () => {
+      clearInterval(interval);
+    };
   }, [isActive]);
 
-  const getMinSecond = () => {
-    const miSec = calculateTime(10, 100);
-    const second = calculateTime(1000, 60);
-    const minute = calculateTime(60000, 60);
-    const computedSecond = computedTime(second);
-    const computedMinute = computedTime(minute);
-    const computedMiliSec = computedTime(miSec);
-    return computedMinute + ':' + computedSecond + ':' + computedMiliSec;
-  };
+  useEffect(() => {
+    if (zero === 'timer') setTime(0);
+  }, [zero]);
 
-  const calculateTime = (ts, mod) => {
-    return Math.floor(time / ts) % mod;
-  };
-
-  const computedTime = (getTime) => {
-    return String(getTime).length === 1 ? `0${getTime}` : getTime;
-  };
+  useEffect(() => {}, [listAllWidgets]);
 
   const stopTimer = () => {
     setIsActive(false);
@@ -48,7 +48,7 @@ const Timer = () => {
     <>
       <div className="text-center">
         <div className="flex items-center justify-center mt-4 mb-6">
-          <div className="text-5xl mx-7">{getMinSecond()}</div>
+          <div className="text-5xl mx-7">{getMinSecond(time)}</div>
         </div>
         <Button onClick={handleStart}>{!isActive ? 'Start' : 'Pause'}</Button>
         &nbsp;

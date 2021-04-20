@@ -3,13 +3,22 @@ import JustSay from '../../components/widgets/JustSay';
 import Counter from '../../components/widgets/Counter';
 import Timer from '../../components/widgets/Timer';
 
-const ListAllWidget = ({ getAllListWidgets }) => {
+const ListAllWidget = ({
+  getAllListWidgets,
+  zero,
+  listAllWidgets,
+  setListAllWidgets,
+}) => {
   if (getAllListWidgets.length > 0) {
-    return getAllListWidgets.map((list, index) => {
+    return getAllListWidgets.map((list) => {
       switch (list.type) {
         case 'justSay':
           return (
-            <Card title="Just Says" key={index} currentTime={list.currentTime}>
+            <Card
+              title="Just Says"
+              key={list.id}
+              currentTime={list.currentTime}
+            >
               <JustSay justSayTitle={list.value} />
             </Card>
           );
@@ -17,15 +26,20 @@ const ListAllWidget = ({ getAllListWidgets }) => {
 
         case 'timer':
           return (
-            <Card title="Timer" key={index} currentTime={list.currentTime}>
-              <Timer />
+            <Card title="Timer" key={list.id} currentTime={list.currentTime}>
+              <Timer
+                listAllWidgets={listAllWidgets}
+                list={list}
+                zero={zero}
+                setListAllWidgets={setListAllWidgets}
+              />
             </Card>
           );
           break;
         case 'counter':
           return (
-            <Card title="Counter" key={index} currentTime={list.currentTime}>
-              <Counter getNum={list.value} />
+            <Card title="Counter" key={list.id} currentTime={list.currentTime}>
+              <Counter getNum={list.value} zero={zero} />
             </Card>
           );
           break;

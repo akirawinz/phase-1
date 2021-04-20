@@ -8,13 +8,13 @@ import ListAllWidget from '../widgets/ListAllWidget';
 import WidgetModalList from '../layouts/WidgetModalList';
 import CardNone from '../template/CardNone';
 import ModalSetting from '../template/ModalSetting';
+import getMinSecond from '../../helpers/calculateTime';
 
 const ModalList = () => {
   const [error, setError] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [showModalJustSay, setShowModalJustSay] = useState(false);
   const [showModalSetting, setShowModalSetting] = useState(false);
-
   const [listAllWidgets, setListAllWidgets] = useState([]);
   const [showModalCounter, setShowModalCounter] = useState(false);
 
@@ -22,7 +22,8 @@ const ModalList = () => {
 
   const [totalJustSay, setTotalJustSay] = useState(0);
   const [totalCounter, setTotalCounter] = useState(0);
-  const [totalTimer, setTotalTimer] = useState(0);
+  const [totalTimer, setTotalTimer] = useState('');
+  const [totalWidget, setTotalWidget] = useState(0);
 
   const [zero, setZero] = useState('');
 
@@ -39,8 +40,15 @@ const ModalList = () => {
       setInitialWidget(false);
       setTotalJustSay(filterTotal('justSay'));
       setTotalCounter(filterTotal('counter'));
-      setTotalTimer(filterTotal('timer'));
-      console.log(listAllWidgets);
+      setTotalWidget(listAllWidgets.length);
+      let getTimer = listAllWidgets
+        .filter((data) => data.type === 'timer')
+        .map((data) => data.value);
+      if (getTimer.length > 0) {
+        getTimer = getTimer.reduce((prev, next) => prev + next);
+      }
+
+      setTotalTimer(getMinSecond(getTimer));
     }
   }, [listAllWidgets]);
 
@@ -122,23 +130,23 @@ const ModalList = () => {
       setShowModalCounter(false);
     }
   };
-  const handleClearButton = () => {
-    if (!initialWidget) {
-      return (
-        <Button color={'red'} onClick={clearAll}>
-          <BiBomb className="inline-block text-xl relative -top-0.5 mx-1" />
-          Clear all
-        </Button>
-      );
-    } else {
-      return (
-        <Button disabled={initialWidget}>
-          <BiBomb className="inline-block text-xl relative -top-0.5 mx-1" />
-          Clear all
-        </Button>
-      );
-    }
-  };
+  // const handleClearButton = () => {
+  //   if (!initialWidget) {
+  //     return (
+  //       <Button color={'red'} onClick={clearAll}>
+  //         <BiBomb className="inline-block text-xl relative -top-0.5 mx-1" />
+  //         Clear all
+  //       </Button>
+  //     );
+  //   } else {
+  //     return (
+  //       <Button disabled={initialWidget}>
+  //         <BiBomb className="inline-block text-xl relative -top-0.5 mx-1" />
+  //         Clear all
+  //       </Button>
+  //     );
+  //   }
+  // };
   const clearAll = () => {
     setError('');
     setShowModal(false);
@@ -146,6 +154,7 @@ const ModalList = () => {
     setShowModalCounter(false);
     setInitialWidget(true);
     setListAllWidgets([]);
+    setShowModalSetting(false);
   };
 
   const handleWidgets = () => {
@@ -154,7 +163,13 @@ const ModalList = () => {
         return b.id - a.id;
       });
       return (
-        <ListAllWidget getAllListWidgets={sort} zero={zero} setZero={setZero} />
+        <ListAllWidget
+          getAllListWidgets={sort}
+          listAllWidgets={listAllWidgets}
+          setListAllWidgets={setListAllWidgets}
+          zero={zero}
+          setZero={setZero}
+        />
       );
     } else {
       return <CardNone openModal={openModal} />;
@@ -168,8 +183,7 @@ const ModalList = () => {
           <RiAddCircleLine className="inline-block text-xl relative -top-0.5 mx-1" />
           Add Widgets
         </Button>
-        {handleClearButton()}
-        <Button onClick={openModal('setting')}>
+        <Button onClick={openModal('setting')} color={'gray'}>
           <BiBomb className="inline-block text-xl relative -top-0.5 mx-1" />
           Setting
         </Button>
@@ -205,8 +219,10 @@ const ModalList = () => {
           listAllWidgets={listAllWidgets}
           totalJustSay={totalJustSay}
           totalCounter={totalCounter}
+          totalTimer={totalTimer}
+          totalWidget={totalWidget}
           setZero={setZero}
-          zero={zero}
+          clearAll={clearAll}
         ></ModalSetting>
         <Modal
           show={showModalCounter}
