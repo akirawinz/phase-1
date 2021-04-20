@@ -5,6 +5,7 @@ const Home = () => {
   return (
     <>
       <h2 className="text-2xl">Widgets</h2>
+
       <ModalList />
     </>
   );

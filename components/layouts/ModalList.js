@@ -3,23 +3,45 @@ import { RiAddCircleLine } from 'react-icons/ri';
 import { BiBomb } from 'react-icons/bi';
 import Button from '../Button';
 import Modal from '../Modal';
-import Card from '../template/Card';
 import Form from '../Form';
 import ListAllWidget from '../widgets/ListAllWidget';
 import WidgetModalList from '../layouts/WidgetModalList';
 import CardNone from '../template/CardNone';
+import ModalSetting from '../template/ModalSetting';
 
 const ModalList = () => {
   const [error, setError] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [showModalJustSay, setShowModalJustSay] = useState(false);
+  const [showModalSetting, setShowModalSetting] = useState(false);
+
   const [listAllWidgets, setListAllWidgets] = useState([]);
   const [showModalCounter, setShowModalCounter] = useState(false);
 
   const [initialWidget, setInitialWidget] = useState(true);
 
+  const [totalJustSay, setTotalJustSay] = useState(0);
+  const [totalCounter, setTotalCounter] = useState(0);
+  const [totalTimer, setTotalTimer] = useState(0);
+
+  const [zero, setZero] = useState('');
+
+  const filterTotal = (type) => {
+    return (
+      listAllWidgets.filter((val) => {
+        return val.type === type;
+      }).length || 0
+    );
+  };
+
   useEffect(() => {
-    if (listAllWidgets.length > 0) setInitialWidget(false);
+    if (listAllWidgets.length > 0) {
+      setInitialWidget(false);
+      setTotalJustSay(filterTotal('justSay'));
+      setTotalCounter(filterTotal('counter'));
+      setTotalTimer(filterTotal('timer'));
+      console.log(listAllWidgets);
+    }
   }, [listAllWidgets]);
 
   const openModal = (modalType) => () => {
@@ -35,6 +57,11 @@ const ModalList = () => {
       setShowModal(false);
       setShowModalJustSay(false);
       setShowModalCounter(true);
+    } else if (modalType === 'setting') {
+      setShowModalSetting(true);
+      setShowModal(false);
+      setShowModalJustSay(false);
+      setShowModalCounter(false);
     }
   };
 
@@ -86,7 +113,11 @@ const ModalList = () => {
       setError('Please provide some value.');
     } else {
       setError('');
-      const getData = getJson(listAllWidgets, e.target.num.value, 'counter');
+      const getData = getJson(
+        listAllWidgets,
+        Number(e.target.num.value),
+        'counter'
+      );
       setListAllWidgets([...listAllWidgets, getData]);
       setShowModalCounter(false);
     }
@@ -122,11 +153,14 @@ const ModalList = () => {
       const sort = listAllWidgets.sort((a, b) => {
         return b.id - a.id;
       });
-      return <ListAllWidget getAllListWidgets={sort} />;
+      return (
+        <ListAllWidget getAllListWidgets={sort} zero={zero} setZero={setZero} />
+      );
     } else {
       return <CardNone openModal={openModal} />;
     }
   };
+
   return (
     <div className="pt-3">
       <div className="mb-4">
@@ -135,6 +169,11 @@ const ModalList = () => {
           Add Widgets
         </Button>
         {handleClearButton()}
+        <Button onClick={openModal('setting')}>
+          <BiBomb className="inline-block text-xl relative -top-0.5 mx-1" />
+          Setting
+        </Button>
+
         <Modal
           show={showModal}
           title={'Add widget'}
@@ -160,7 +199,15 @@ const ModalList = () => {
             name={'title'}
           />
         </Modal>
-
+        <ModalSetting
+          showModalSetting={showModalSetting}
+          setShowModalSetting={setShowModalSetting}
+          listAllWidgets={listAllWidgets}
+          totalJustSay={totalJustSay}
+          totalCounter={totalCounter}
+          setZero={setZero}
+          zero={zero}
+        ></ModalSetting>
         <Modal
           show={showModalCounter}
           title={'Add counter'}
