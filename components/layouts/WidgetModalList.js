@@ -2,6 +2,8 @@ import { AiOutlineMessage } from 'react-icons/ai';
 import { RiIncreaseDecreaseLine } from 'react-icons/ri';
 import { IoTimerOutline } from 'react-icons/io5';
 import WidgetModal from '../widgets/WidgetModal';
+import GetJson from '../../helpers/getJsonFormat';
+
 const WidgetModalList = ({
   openModal,
   getJson,
@@ -10,7 +12,7 @@ const WidgetModalList = ({
   setShowModal,
 }) => {
   const getTimer = () => {
-    const getData = getJson(listAllWidgets, '', 'timer');
+    const getData = GetJson(listAllWidgets, '', 'timer');
     setListAllWidgets([...listAllWidgets, getData]);
     setShowModal(false);
   };

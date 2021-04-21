@@ -7,6 +7,7 @@ const Form = ({
   color,
   inputType = 'text',
   placeHolder = '',
+
   onSubmit = (e) => {
     e.preventDefault;
   },
