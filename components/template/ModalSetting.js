@@ -13,7 +13,7 @@ import {
   zeroState,
   listAllWidgetsState,
 } from '../States';
-const ModalSetting = ({ clearAll }) => {
+const ModalSetting = () => {
   const [showModalActive, setShowModalActive] = useRecoilState(
     showModalActiveState
   );
@@ -38,6 +38,14 @@ const ModalSetting = ({ clearAll }) => {
       setTotalTimer(getMinSecond(getTotalTimer));
     }
   }, [listAllWidgets]);
+  const clearAll = () => {
+    setListAllWidgets([]);
+    setTotalJustSay(0);
+    setTotalCounter(0);
+    setTotalWidget(0);
+    setTotalTimer('00:00:00');
+    setShowModalActive(false);
+  };
 
   const getFinalTotalJustSayLength = (temp) => {
     let getString = '';

@@ -12,12 +12,13 @@ const Button = ({
     {
       'bg-blue-500 hover:bg-blue-600':
         !disabled && color !== 'red' && color !== 'gray',
-      'bg-gray-300': disabled && color !== 'red',
-      'bg-red-500 hover:bg-red-600 ': color === 'red',
+      'bg-red-500 hover:bg-red-600 ': !disabled && color === 'red',
       'w-full': wFull,
       'bg-gray-500 hover:bg-gray-600': color === 'gray',
+      'bg-gray-300': disabled && color === 'red',
     }
   );
+
   if (icon) {
     styled = classNames('text-lg text-gray-600 focus:outline-none ');
   }

@@ -8,7 +8,6 @@ import JustSay from '../../components/widgets/JustSay';
 import Counter from '../../components/widgets/Counter';
 import Timer from '../../components/widgets/Timer';
 import Button from '../Button';
-
 import { listAllWidgetsState, showModalActiveState } from '../States';
 const ListAllWidget = ({ onHandleDelete, openInitialModal, handleOnClick }) => {
   const [listAllWidgets, setListAllWidgets] = useRecoilState(

@@ -30,11 +30,6 @@ const ModalList = () => {
     listAllWidgetsState
   );
 
-  const clearAll = () => {
-    setError('');
-    setListAllWidgets([]);
-  };
-
   const openInitialModal = () => {
     setShowModalActive(true);
     setShowModalContent(<WidgetModalList handleOnClick={handleOnClick} />);
@@ -42,7 +37,7 @@ const ModalList = () => {
 
   const openSettingModal = () => {
     setShowModalActive(true);
-    setShowModalContent(<ModalSetting clearAll={clearAll}></ModalSetting>);
+    setShowModalContent(<ModalSetting></ModalSetting>);
   };
 
   const onAddListAllWidgetState = (value = '', type) => {

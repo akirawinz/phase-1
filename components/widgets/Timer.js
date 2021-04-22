@@ -29,6 +29,7 @@ const Timer = ({ mapNewData, list }) => {
     if (zero === 'timer') {
       setTime(0);
       setZero('');
+      setIsActive(false);
     }
   }, [zero]);
 
@@ -51,7 +52,7 @@ const Timer = ({ mapNewData, list }) => {
         </div>
         <Button onClick={handleStart}>{!isActive ? 'Start' : 'Pause'}</Button>
         &nbsp;
-        <Button onClick={stopTimer} disabled={disabled}>
+        <Button onClick={stopTimer} disabled={disabled} color={'red'}>
           Reset
         </Button>
       </div>
