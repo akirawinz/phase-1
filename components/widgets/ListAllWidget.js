@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { MdEdit } from 'react-icons/md';
 import { IoMdClose } from 'react-icons/io';
@@ -11,12 +10,7 @@ import Timer from '../../components/widgets/Timer';
 import Button from '../Button';
 
 import { listAllWidgetsState, showModalActiveState } from '../States';
-const ListAllWidget = ({
-  openModal,
-  onHandleDelete,
-  openInitialModal,
-  handleOnClick,
-}) => {
+const ListAllWidget = ({ onHandleDelete, openInitialModal, handleOnClick }) => {
   const [listAllWidgets, setListAllWidgets] = useRecoilState(
     listAllWidgetsState
   );
@@ -49,7 +43,6 @@ const ListAllWidget = ({
               title="Just Says"
               currentTime={list.currentTime}
               key={list.id}
-              openModal={openModal}
             >
               <div className="absolute top-5 right-5">
                 <Button
