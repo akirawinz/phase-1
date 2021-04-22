@@ -1,7 +1,11 @@
 import Button from '../Button';
 import { useEffect, useState } from 'react';
 import PolarButton from '../PolarButton';
-const Counter = ({ getNum, zero }) => {
+import { useRecoilState } from 'recoil';
+import { zeroState } from '../States';
+
+const Counter = ({ list, getNum, mapNewData }) => {
+  const [zero, setZero] = useRecoilState(zeroState);
   const [num, setNum] = useState(getNum);
   let disabled = false;
   if (num === 0 || getNum === 0) disabled = true;
@@ -9,7 +13,13 @@ const Counter = ({ getNum, zero }) => {
     setNum(Number(getNum));
   }, [getNum]);
   useEffect(() => {
-    if (zero === 'counter') setNum(0);
+    mapNewData(list, num);
+  }, [num]);
+  useEffect(() => {
+    if (zero === 'counter') {
+      setNum(0);
+      setZero('');
+    }
   }, [zero]);
   return (
     <div className="text-center">

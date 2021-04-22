@@ -1,5 +1,5 @@
 import '../styles/globals.css';
-
+import { RecoilRoot } from 'recoil';
 import React from 'react';
 import App from 'next/app';
 
@@ -9,9 +9,11 @@ class MyApp extends App {
     const Layout = Component.Layout;
 
     return (
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
+      <RecoilRoot>
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </RecoilRoot>
     );
   }
 }

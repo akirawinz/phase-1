@@ -1,13 +1,7 @@
 import Form from '../Form';
 import { useState } from 'react';
-import GetJson from '../../helpers/getJsonFormat';
 
-const FormCounter = ({
-  getJson,
-  setListAllWidgets,
-  setShowModalCounter,
-  listAllWidgets,
-}) => {
+const FormCounter = ({ onAdd }) => {
   const [error, setError] = useState(null);
   const handleFormCounter = (e) => {
     e.preventDefault();
@@ -17,24 +11,21 @@ const FormCounter = ({
       setError('Please provide some value.');
     } else {
       setError('');
-      const getData = GetJson(
-        listAllWidgets,
-        Number(e.target.num.value),
-        'counter'
-      );
-      setListAllWidgets([...listAllWidgets, getData]);
-      setShowModalCounter(false);
+      onAdd(Number(e.target.num.value), 'counter');
     }
   };
 
   return (
-    <Form
-      onSubmit={handleFormCounter}
-      error={error}
-      type={'number'}
-      name={'num'}
-      placeHolder={'initial number'}
-    />
+    <>
+      <div className="text-xl mb-1">Add Counter</div>
+      <Form
+        onSubmit={handleFormCounter}
+        error={error}
+        type={'number'}
+        name={'num'}
+        placeHolder={'initial number'}
+      />
+    </>
   );
 };
 

@@ -1,13 +1,6 @@
-const GetJson = (data, value = '', type) => {
-  let id;
-  if (data.length === 0) {
-    id = 1;
-  } else {
-    const getLastArrId = data[0].id;
-    id = getLastArrId + 1;
-  }
+const GetJson = (value = '', type) => {
   return {
-    id,
+    id: new Date().valueOf(),
     value,
     currentTime:
       'Added on ' +

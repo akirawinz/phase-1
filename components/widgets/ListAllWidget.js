@@ -1,26 +1,45 @@
+import { useState } from 'react';
+import { useRecoilState } from 'recoil';
+import { MdEdit } from 'react-icons/md';
+import { IoMdClose } from 'react-icons/io';
+import _ from 'lodash';
 import Card from '../../components/template/Card';
+import CardNone from '../template/CardNone';
 import JustSay from '../../components/widgets/JustSay';
 import Counter from '../../components/widgets/Counter';
 import Timer from '../../components/widgets/Timer';
-import Modal from '../Modal';
-import FormJustSay from '../form/FormJustSay';
-import { useState } from 'react';
+import Button from '../Button';
 
+import { listAllWidgetsState, showModalActiveState } from '../States';
 const ListAllWidget = ({
-  getAllListWidgets,
-  zero,
-  listAllWidgets,
-  setShowModalJustSay,
   openModal,
-  setListAllWidgets,
-  showModalEditJustSay,
-  setShowModalEditJustSay,
+  onHandleDelete,
+  openInitialModal,
+  handleOnClick,
 }) => {
-  const [showEditModal, setShowEditModal] = useState(false);
-  const handleEditJustSay = () => {
-    setShowEditModal(false);
-    console.log('zzz');
+  const [listAllWidgets, setListAllWidgets] = useRecoilState(
+    listAllWidgetsState
+  );
+  const [showModalActive, setShowModalActive] = useRecoilState(
+    showModalActiveState
+  );
+
+  const getAllListWidgets = listAllWidgets.slice().sort((a, b) => {
+    return b.id - a.id;
+  });
+
+  const mapNewData = (list, value) => {
+    const temp = _.cloneDeep(listAllWidgets);
+    const mapData = temp.map((data) => {
+      if (data.id === list.id) {
+        return { ...data, value };
+      } else {
+        return data;
+      }
+    });
+    setListAllWidgets(mapData);
   };
+
   if (getAllListWidgets.length > 0) {
     return getAllListWidgets.map((list) => {
       switch (list.type) {
@@ -30,54 +49,49 @@ const ListAllWidget = ({
               title="Just Says"
               currentTime={list.currentTime}
               key={list.id}
-              setShowEditModal={() => {
-                setShowEditModal(true);
-              }}
-              onClick={() =>
-                setListAllWidgets(
-                  listAllWidgets.filter((data) => data.id !== list.id)
-                )
-              }
               openModal={openModal}
             >
-              <JustSay justSayTitle={list.value} />
-              <Modal
-                show={showEditModal}
-                title={'Edit JustSay'}
-                onCancel={() => setShowEditModal(false)}
-              >
-                {list.id}
-                <FormJustSay
-                  setListAllWidgets={setListAllWidgets}
-                  setShowModalJustSay={setShowModalJustSay}
-                  listAllWidgets={listAllWidgets}
-                  addType={false}
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    handleEditJustSay(list);
+              <div className="absolute top-5 right-5">
+                <Button
+                  icon={true}
+                  onClick={() => {
+                    onHandleDelete(list.id);
                   }}
-                />
-              </Modal>
+                >
+                  <IoMdClose />
+                </Button>
+                <Button
+                  icon={true}
+                  onClick={() => {
+                    handleOnClick('justSay', false, list.id);
+                    setShowModalActive(true);
+                  }}
+                >
+                  <MdEdit />
+                </Button>
+              </div>
+              <JustSay justSayTitle={list.value} />
             </Card>
           );
           break;
 
         case 'timer':
           return (
-            <Card
-              title="Timer"
-              key={list.id}
-              currentTime={list.currentTime}
-              onClick={() =>
-                setListAllWidgets(
-                  listAllWidgets.filter((data) => data.id !== list.id)
-                )
-              }
-            >
+            <Card title="Timer" key={list.id} currentTime={list.currentTime}>
+              <div className="absolute top-5 right-5">
+                <Button
+                  icon={true}
+                  onClick={() => {
+                    onHandleDelete(list.id);
+                  }}
+                >
+                  <IoMdClose />
+                </Button>
+              </div>
               <Timer
                 listAllWidgets={listAllWidgets}
                 list={list}
-                zero={zero}
+                mapNewData={mapNewData}
                 setListAllWidgets={setListAllWidgets}
               />
             </Card>
@@ -85,24 +99,29 @@ const ListAllWidget = ({
           break;
         case 'counter':
           return (
-            <Card
-              title="Counter"
-              key={list.id}
-              currentTime={list.currentTime}
-              onClick={() =>
-                setListAllWidgets(
-                  listAllWidgets.filter((data) => data.id !== list.id)
-                )
-              }
-            >
-              <Counter getNum={list.value} zero={zero} />
+            <Card title="Counter" key={list.id} currentTime={list.currentTime}>
+              <div className="absolute top-5 right-5">
+                <Button
+                  icon={true}
+                  onClick={() => {
+                    onHandleDelete(list.id);
+                  }}
+                >
+                  <IoMdClose />
+                </Button>
+              </div>
+              <Counter
+                list={list}
+                getNum={list.value}
+                mapNewData={mapNewData}
+              />
             </Card>
           );
           break;
       }
     });
   } else {
-    return <p></p>;
+    return <CardNone openInitialModal={openInitialModal} />;
   }
 };
 

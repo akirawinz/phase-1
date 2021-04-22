@@ -1,8 +1,11 @@
 import Button from '../Button';
 import { useEffect, useState } from 'react';
 import getMinSecond from '../../helpers/calculateTime';
-
-const Timer = ({ listAllWidgets, list, setListAllWidgets, zero }) => {
+import _ from 'lodash';
+import { useRecoilState } from 'recoil';
+import { zeroState } from '../States';
+const Timer = ({ mapNewData, list }) => {
+  const [zero, setZero] = useRecoilState(zeroState);
   const [time, setTime] = useState(0);
   const [isActive, setIsActive] = useState(false);
   const [disabled, setDisabled] = useState(true);
@@ -14,24 +17,20 @@ const Timer = ({ listAllWidgets, list, setListAllWidgets, zero }) => {
         setTime((prevTime) => prevTime + 10);
       }, 10);
     }
-    const mapData = listAllWidgets.map((data) => {
-      if (data.id === list.id) {
-        return { ...data, value: time };
-      } else {
-        return data;
-      }
-    });
-    setListAllWidgets(mapData);
     return () => {
       clearInterval(interval);
     };
   }, [isActive]);
 
   useEffect(() => {
-    if (zero === 'timer') setTime(0);
+    mapNewData(list, time);
+  }, [time]);
+  useEffect(() => {
+    if (zero === 'timer') {
+      setTime(0);
+      setZero('');
+    }
   }, [zero]);
-
-  useEffect(() => {}, [listAllWidgets]);
 
   const stopTimer = () => {
     setIsActive(false);

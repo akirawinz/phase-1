@@ -1,162 +1,119 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { RiAddCircleLine } from 'react-icons/ri';
 import { BiBomb } from 'react-icons/bi';
 import Button from '../Button';
 import Modal from '../Modal';
-import Form from '../Form';
 import WidgetModalList from '../layouts/WidgetModalList';
 import ModalSetting from '../template/ModalSetting';
-import getMinSecond from '../../helpers/calculateTime';
-import ModalContent from './ModalContent';
+import ListAllWidget from '../widgets/ListAllWidget';
+import GetJson from '../../helpers/getJsonFormat';
 import FormJustSay from '../form/FormJustSay';
 import FormCounter from '../form/FormCounter';
+import _ from 'lodash';
+//recoil
+import { useRecoilState } from 'recoil';
+import {
+  showModalContentState,
+  showModalActiveState,
+  listAllWidgetsState,
+} from '../States';
+
 const ModalList = () => {
   const [error, setError] = useState('');
-  const [showModal, setShowModal] = useState();
-  const [showModalJustSay, setShowModalJustSay] = useState(false);
-  const [showModalEditJustSay, setShowModalEditJustSay] = useState(false);
-  const [showModalCounter, setShowModalCounter] = useState(false);
-  const [showModalSetting, setShowModalSetting] = useState(false);
-  const [listAllWidgets, setListAllWidgets] = useState([]);
-  const [initialWidget, setInitialWidget] = useState(true);
-
-  const [totalJustSay, setTotalJustSay] = useState(0);
-  const [totalCounter, setTotalCounter] = useState(0);
-  const [totalTimer, setTotalTimer] = useState('');
-  const [totalWidget, setTotalWidget] = useState(0);
-  const [zero, setZero] = useState('');
-
-  const filterTotal = (type) => {
-    return (
-      listAllWidgets.filter((val) => {
-        return val.type === type;
-      }).length || 0
-    );
-  };
-
-  useEffect(() => {
-    if (listAllWidgets.length > 0) {
-      setInitialWidget(false);
-      setTotalJustSay(filterTotal('justSay'));
-      setTotalCounter(filterTotal('counter'));
-      setTotalWidget(listAllWidgets.length);
-      let getTimer = listAllWidgets
-        .filter((data) => data.type === 'timer')
-        .map((data) => data.value);
-      if (getTimer.length > 0) {
-        getTimer = getTimer.reduce((prev, next) => prev + next);
-      }
-      setTotalTimer(getMinSecond(getTimer));
-    }
-  }, [listAllWidgets]);
-
-  const openModal = (modalType) => () => {
-    if (modalType === 'modal') {
-      setShowModal(true);
-      setShowModalJustSay(false);
-      setShowModalCounter(false);
-    } else if (modalType === 'formJustSay') {
-      setShowModal(false);
-      setShowModalJustSay(true);
-      setShowModalCounter(false);
-    } else if (modalType === 'formAddCounter') {
-      setShowModal(false);
-      setShowModalJustSay(false);
-      setShowModalCounter(true);
-    } else if (modalType === 'setting') {
-      setShowModalSetting(true);
-      setShowModal(false);
-      setShowModalJustSay(false);
-      setShowModalCounter(false);
-    } else if (modalType === 'formEditJustSay') {
-      setShowModalEditJustSay(true);
-    }
-  };
+  const [showModalActive, setShowModalActive] = useRecoilState(
+    showModalActiveState
+  );
+  const [showModalContent, setShowModalContent] = useRecoilState(
+    showModalContentState
+  );
+  const [listAllWidgets, setListAllWidgets] = useRecoilState(
+    listAllWidgetsState
+  );
 
   const clearAll = () => {
     setError('');
-    setShowModal(false);
-    setShowModalJustSay(false);
-    setShowModalCounter(false);
-    setInitialWidget(true);
     setListAllWidgets([]);
-    setShowModalSetting(false);
-    setShowModalEditJustSay(false);
   };
 
+  const openInitialModal = () => {
+    setShowModalActive(true);
+    setShowModalContent(<WidgetModalList handleOnClick={handleOnClick} />);
+  };
+
+  const openSettingModal = () => {
+    setShowModalActive(true);
+    setShowModalContent(<ModalSetting clearAll={clearAll}></ModalSetting>);
+  };
+
+  const onAddListAllWidgetState = (value = '', type) => {
+    const getData = GetJson(value, type);
+    setListAllWidgets([...listAllWidgets, getData]);
+    setShowModalActive(false);
+  };
+
+  const onHandleEdit = (listId, value) => {
+    const temp = _.cloneDeep(listAllWidgets);
+    temp.map((data) => {
+      if (data.id === listId) {
+        data.value = value;
+      }
+    });
+    setListAllWidgets(temp);
+    setShowModalActive(false);
+  };
+
+  const onHandleDelete = (listId) => {
+    const temp = _.cloneDeep(listAllWidgets);
+    const newData = temp.filter((data) => {
+      return data.id !== listId;
+    });
+    setListAllWidgets(newData);
+  };
+
+  const handleOnClick = (type, addType = true, listId = 0) => {
+    if (type === 'justSay') {
+      setShowModalContent(
+        <FormJustSay
+          onAdd={onAddListAllWidgetState}
+          onEdit={onHandleEdit}
+          addType={addType}
+          listId={listId}
+        />
+      );
+    }
+    if (type === 'counter') {
+      setShowModalContent(<FormCounter onAdd={onAddListAllWidgetState} />);
+    }
+    if (type === 'timer') {
+      onAddListAllWidgetState('', 'timer');
+    }
+  };
+
+  const showDataModals = () => {
+    return (
+      <Modal show={showModalActive} onCancel={() => setShowModalActive(false)}>
+        {showModalContent}
+      </Modal>
+    );
+  };
   return (
     <div className="pt-3">
       <div className="mb-4">
-        <Button onClick={openModal('modal')}>
+        <Button onClick={openInitialModal}>
           <RiAddCircleLine className="inline-block text-xl relative -top-0.5 mx-1" />
           Add Widgets
         </Button>
-        <Button onClick={openModal('setting')} color={'gray'}>
+        <Button onClick={openSettingModal} color={'gray'}>
           <BiBomb className="inline-block text-xl relative -top-0.5 mx-1" />
           Setting
         </Button>
-
-        <Modal
-          show={showModal}
-          title={'Add widget'}
-          onCancel={() => setShowModal(false)}
-        >
-          <WidgetModalList
-            openModal={openModal}
-            listAllWidgets={listAllWidgets}
-            setListAllWidgets={setListAllWidgets}
-            setShowModal={setShowModal}
-          />
-        </Modal>
-        <Modal
-          show={showModalJustSay}
-          title={'Add JustSay'}
-          onCancel={() => setShowModalJustSay(false)}
-        >
-          <FormJustSay
-            setListAllWidgets={setListAllWidgets}
-            setShowModalJustSay={setShowModalJustSay}
-            listAllWidgets={listAllWidgets}
-          />
-        </Modal>
-
-        <ModalSetting
-          showModalSetting={showModalSetting}
-          setShowModalSetting={setShowModalSetting}
-          listAllWidgets={listAllWidgets}
-          totalJustSay={totalJustSay}
-          totalCounter={totalCounter}
-          totalTimer={totalTimer}
-          totalWidget={totalWidget}
-          setZero={setZero}
-          clearAll={clearAll}
-        ></ModalSetting>
-        <Modal
-          show={showModalCounter}
-          title={'Add counter'}
-          onCancel={() => setShowModalCounter(false)}
-        >
-          <FormCounter
-            setListAllWidgets={setListAllWidgets}
-            setShowModalCounter={setShowModalCounter}
-            listAllWidgets={listAllWidgets}
-          />
-        </Modal>
+        {showDataModals('Add Widgets')}
       </div>
       <div className="md:flex md:flex-wrap md:-mr-4">
-        <ModalContent
-          initialWidget={initialWidget}
-          listAllWidgets={listAllWidgets}
-          setListAllWidgets={setListAllWidgets}
-          zero={zero}
-          setZero={setZero}
-          openModal={openModal}
-          showModalEditJustSay={showModalEditJustSay}
-          setShowModalEditJustSay={setShowModalEditJustSay}
-          setShowModalJustSay={setShowModalJustSay}
-          error={error}
-          setError={setError}
-          openModal={openModal}
+        <ListAllWidget
+          onEdit={onHandleEdit}
+          handleOnClick={handleOnClick}
+          onHandleDelete={onHandleDelete}
         />
       </div>
     </div>

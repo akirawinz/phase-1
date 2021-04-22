@@ -1,5 +1,5 @@
 import Card from '../template/Card';
-const CardNone = ({ openModal }) => {
+const CardNone = ({ openInitialModal }) => {
   return (
     <Card>
       <div className="text-center text-gray-400 my-8 font-light">
@@ -8,7 +8,7 @@ const CardNone = ({ openModal }) => {
           Click &nbsp;
           <button
             className="font-normal text-blue-400 focus:outline-none"
-            onClick={openModal('modal')}
+            onClick={openInitialModal}
           >
             here
           </button>
