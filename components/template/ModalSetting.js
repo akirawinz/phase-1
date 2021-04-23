@@ -61,8 +61,10 @@ const ModalSetting = () => {
     let getTimer = temp
       .filter((data) => data.type === type)
       .map((data) => data.value);
-    if (getTimer.length > 0) {
+    if (getTimer.length != 0) {
       getTimer = getTimer.reduce((prev, next) => prev + next);
+    } else {
+      getTimer = 0;
     }
     return getTimer;
   };
@@ -70,7 +72,7 @@ const ModalSetting = () => {
   const handleTypeSetZero = (e) => {
     e.preventDefault();
     const inputType = e.target.inputType.value;
-    if (inputType === 'counter') {
+    if (inputType === 'counter' && totalCounter !== 0) {
       setZero('counter');
       setTotalCounter(0);
     }
