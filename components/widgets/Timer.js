@@ -24,9 +24,10 @@ const Timer = ({ mapNewData, list }) => {
   }, [isActive]);
 
   useEffect(() => {
-    mapNewData(list, time);
+    setTimeout(mapNewData(list, time), 1000);
     if (time === 0) setDisabled(true);
   }, [time]);
+
   useEffect(() => {
     if (zero === 'timer') {
       setTime(0);
