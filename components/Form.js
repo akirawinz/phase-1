@@ -7,6 +7,7 @@ const Form = ({
   color,
   inputType = 'text',
   placeHolder = '',
+  defaultValue = '',
 
   onSubmit = (e) => {
     e.preventDefault;
@@ -19,6 +20,7 @@ const Form = ({
           type={type}
           name={name}
           placeholder={placeHolder}
+          defaultValue={defaultValue}
           className="w-full px-2.5 py-1 focus:outline-none rounded-md"
         />
       );

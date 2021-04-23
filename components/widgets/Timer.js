@@ -17,6 +17,7 @@ const Timer = ({ mapNewData, list }) => {
         setTime((prevTime) => prevTime + 10);
       }, 10);
     }
+
     return () => {
       clearInterval(interval);
     };
@@ -24,6 +25,7 @@ const Timer = ({ mapNewData, list }) => {
 
   useEffect(() => {
     mapNewData(list, time);
+    if (time === 0) setDisabled(true);
   }, [time]);
   useEffect(() => {
     if (zero === 'timer') {
@@ -35,7 +37,6 @@ const Timer = ({ mapNewData, list }) => {
 
   const stopTimer = () => {
     setIsActive(false);
-    setDisabled(true);
     setTime(0);
   };
 

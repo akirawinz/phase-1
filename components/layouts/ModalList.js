@@ -65,7 +65,7 @@ const ModalList = () => {
     setListAllWidgets(newData);
   };
 
-  const handleOnClick = (type, addType = true, listId = 0) => {
+  const handleOnClick = (type, addType = true, listId = 0, list) => {
     if (type === 'justSay') {
       setShowModalContent(
         <FormJustSay
@@ -73,6 +73,7 @@ const ModalList = () => {
           onEdit={onHandleEdit}
           addType={addType}
           listId={listId}
+          list={list}
         />
       );
     }

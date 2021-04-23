@@ -15,7 +15,7 @@ const Button = ({
       'bg-red-500 hover:bg-red-600 ': !disabled && color === 'red',
       'w-full': wFull,
       'bg-gray-500 hover:bg-gray-600': color === 'gray',
-      'bg-gray-300': disabled && color === 'red',
+      'bg-gray-300': disabled || (disabled && color === 'red'),
     }
   );
 

@@ -55,7 +55,7 @@ const ListAllWidget = ({ onHandleDelete, openInitialModal, handleOnClick }) => {
                 <Button
                   icon={true}
                   onClick={() => {
-                    handleOnClick('justSay', false, list.id);
+                    handleOnClick('justSay', false, list.id, list);
                     setShowModalActive(true);
                   }}
                 >

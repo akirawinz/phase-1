@@ -1,9 +1,11 @@
+import { list } from 'postcss';
 import { useState } from 'react';
 import Form from '../Form';
 const FormJustSay = ({
   onEdit,
   addType,
   listId,
+  list,
   onAdd,
   onSubmit = () => {},
 }) => {
@@ -45,6 +47,7 @@ const FormJustSay = ({
         error={error}
         type={'text'}
         name={'title'}
+        defaultValue={list ? list.value : ''}
       />
     </>
   );

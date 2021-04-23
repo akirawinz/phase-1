@@ -72,9 +72,11 @@ const ModalSetting = () => {
     const inputType = e.target.inputType.value;
     if (inputType === 'counter') {
       setZero('counter');
+      setTotalCounter(0);
     }
     if (inputType === 'timer') {
       setZero('timer');
+      setTotalTimer('00:00:00');
     }
     setShowModalActive(false);
   };
