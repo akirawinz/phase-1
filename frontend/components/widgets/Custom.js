@@ -29,9 +29,10 @@ const Custom = ({ list, mapNewCustom, searchAns }) => {
     if (list.method) {
       return list.method.map((data, index) => {
         return (
-          <li key={index}>
-            method : {index + 1} {data} = 24
-          </li>
+          <div key={index}>
+            <span className="text-left">method : </span>
+            {index + 1} {data} = 24
+          </div>
         );
       });
     } else {
