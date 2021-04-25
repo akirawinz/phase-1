@@ -6,22 +6,32 @@
 
 ## General info
 
-This project is simple Lorem ipsum dolor generator.
+This project must run frontend and api service
 
 ## Technologies
 
 Project is created with:
 
-- Lorem version: 12.3
-- Ipsum version: 2.33
-- Ament library version: 999
+- frontend nextJs, recoil, tailwindCss
+- backend nodeJs, Adonis Framework
 
 ## Setup
 
 To run this project, install it locally using npm:
 
 ```
-$ cd ../lorem
-$ npm install
-$ npm start
+## Setup Frontend
+$ cd ./frontend/
+$ npm i
+# npm run dev
+port will start at localhost:3000
+```
+
+```
+## Setup api service
+$ cd ./apy/
+$ npm i
+# npm run start
+port will start at localhost:3333
+
 ```
