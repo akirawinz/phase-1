@@ -19,17 +19,21 @@ Project is created with:
 
 To run this project, install it locally using npm:
 
-```
 ## Setup Frontend
+
+```
+
 $ cd ./frontend/
 $ npm i
 # npm run dev
 port will start at localhost:3000
 ```
 
-```
 ## Setup api service
-$ cd ./apy/
+
+```
+
+$ cd ./api/
 $ npm i
 # npm run start
 port will start at localhost:3333
