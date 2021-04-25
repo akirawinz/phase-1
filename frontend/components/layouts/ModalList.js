@@ -78,14 +78,16 @@ const ModalList = () => {
       });
     return data;
   };
-  const onHandleEditCustom = (listId, value, method, type = '') => {
+  const onHandleEditCustom = async (listId, value, type = '') => {
     const temp = _.cloneDeep(listAllWidgets);
+    const list = { value };
+    const method = await searchAns(list);
     temp.map((data) => {
       if (data.id === listId) {
         data.value = value;
+        data.method = method;
       }
     });
-    console.log('z');
     setListAllWidgets(temp);
     setShowModalActive(false);
   };
@@ -94,7 +96,6 @@ const ModalList = () => {
     const temp = _.cloneDeep(listAllWidgets);
     const mapData = temp.map((data) => {
       if (data.id === list.id) {
-        console.log('xx');
         return { ...data, method: method };
       } else {
         return data;
@@ -126,7 +127,7 @@ const ModalList = () => {
       setShowModalContent(
         <FormJustSayAndWeather
           onAdd={onAddListAllWidgetState}
-          onEdit={onHandleEditCustom}
+          onEdit={onHandleEdit}
           addType={addType}
           listId={listId}
           list={list}
@@ -159,7 +160,7 @@ const ModalList = () => {
           type={type}
           onAdd={onAddListAllWidgetState}
           addType={addType}
-          onEdit={onHandleEdit}
+          onEdit={onHandleEditCustom}
           list={list}
         />
       );

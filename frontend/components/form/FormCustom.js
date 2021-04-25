@@ -39,7 +39,6 @@ const FormCustom = ({
     e.preventDefault();
     const arr = getArr(e);
     onEdit(list.id, arr, 'Custom');
-    setIsCustom(true);
   };
 
   return (
