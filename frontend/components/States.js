@@ -47,3 +47,8 @@ export const isCustomEditState = atom({
   key: 'isCustom',
   default: true,
 });
+
+export const coldestCityState = atom({
+  key: 'coldestCity',
+  default: '',
+});

@@ -13,6 +13,7 @@ import {
   totalJustSayState,
   zeroState,
   listAllWidgetsState,
+  coldestCityState,
 } from '../States';
 const ModalSetting = ({ onEdit }) => {
   const [showModalActive, setShowModalActive] = useRecoilState(
@@ -25,20 +26,41 @@ const ModalSetting = ({ onEdit }) => {
   const [listAllWidgets, setListAllWidgets] = useRecoilState(
     listAllWidgetsState
   );
+  const [coldestCity, setColdestCity] = useRecoilState(coldestCityState);
   const [zero, setZero] = useRecoilState(zeroState);
 
   useEffect(() => {
     if (listAllWidgets.length > 0) {
       const temp = _.cloneDeep(listAllWidgets);
+      console.log('xx');
       const getTotalTimer = getFinalToTalTimerOrCounter(temp, 'timer');
       const getTotalCounter = getFinalToTalTimerOrCounter(temp, 'counter');
       const getTotalJustSayLength = getFinalTotalJustSayLength(temp);
+      const getColdestCity = getDataColdestCity(temp);
+      setColdestCity(getColdestCity);
+      console.log(getColdestCity, 'zz');
       setTotalJustSay(getTotalJustSayLength);
       setTotalCounter(getTotalCounter);
       setTotalWidget(listAllWidgets.length);
       setTotalTimer(getMinSecond(getTotalTimer));
     }
   }, [listAllWidgets]);
+  const getDataColdestCity = (temp) => {
+    let coldest = temp
+      .filter((data) => data.type === 'Weather')
+      .map((data) => {
+        if (data.weather) {
+          return { name: data.weather.value, temp: data.weather.temp };
+        }
+      })
+      .sort((a, b) => a.temp - b.temp);
+    if (coldest[0]) {
+      coldest = coldest[0].name;
+    } else {
+      coldest = '';
+    }
+    return coldest;
+  };
   const clearAll = () => {
     setListAllWidgets([]);
     setTotalJustSay(0);
@@ -109,6 +131,10 @@ const ModalSetting = ({ onEdit }) => {
             <div className="table-cell">
               {totalTimer ? totalTimer : '00:00:00'}
             </div>
+          </div>
+          <div className="table-row">
+            <div className="table-cell pr-4 font-semibold">Coldest City :</div>
+            <div className="table-cell">{coldestCity}</div>
           </div>
         </div>
       </Card>
