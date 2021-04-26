@@ -46,7 +46,19 @@ const ModalList = () => {
 
   const onAddListAllWidgetState = (value = '', type) => {
     const getData = GetJson(value, type);
-    setListAllWidgets([...listAllWidgets, getData]);
+    if (type === 'JustShout' && listAllWidgets.length > 0) {
+      const temp = _.cloneDeep(listAllWidgets);
+      temp.map((data) => {
+        if (data.type === 'JustShout') {
+          setDefaultShout(value);
+          data.value = value;
+        }
+      });
+      setListAllWidgets([...temp, getData]);
+    } else {
+      setListAllWidgets([...listAllWidgets, getData]);
+    }
+
     setShowModalActive(false);
   };
 
