@@ -9,7 +9,6 @@ const Form = ({
   placeHolder = '',
   defaultValue = '',
   disabled,
-
   onSubmit = (e) => {
     e.preventDefault;
   },

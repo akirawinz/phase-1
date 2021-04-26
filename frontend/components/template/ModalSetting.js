@@ -32,13 +32,11 @@ const ModalSetting = ({ onEdit }) => {
   useEffect(() => {
     if (listAllWidgets.length > 0) {
       const temp = _.cloneDeep(listAllWidgets);
-      console.log('xx');
       const getTotalTimer = getFinalToTalTimerOrCounter(temp, 'timer');
       const getTotalCounter = getFinalToTalTimerOrCounter(temp, 'counter');
       const getTotalJustSayLength = getFinalTotalJustSayLength(temp);
       const getColdestCity = getDataColdestCity(temp);
       setColdestCity(getColdestCity);
-      console.log(getColdestCity, 'zz');
       setTotalJustSay(getTotalJustSayLength);
       setTotalCounter(getTotalCounter);
       setTotalWidget(listAllWidgets.length);

@@ -51,7 +51,7 @@ const FormCustom = ({
         <input
           type="number"
           name="num1"
-          min="0"
+          min="1"
           max="9"
           defaultValue={list ? list.value[0] : ''}
           className="w-full px-2.5 py-1 border focus:outline-none rounded-md"
@@ -60,7 +60,7 @@ const FormCustom = ({
         <input
           type="number"
           name="num2"
-          min="0"
+          min="1"
           max="9"
           defaultValue={list ? list.value[1] : ''}
           className="w-full px-2.5 py-1 border focus:outline-none rounded-md"
@@ -68,7 +68,7 @@ const FormCustom = ({
         <input
           type="number"
           name="num3"
-          min="0"
+          min="1"
           max="9"
           defaultValue={list ? list.value[2] : ''}
           className="w-full px-2.5 py-1 border focus:outline-none rounded-md"
@@ -76,7 +76,7 @@ const FormCustom = ({
         <input
           type="number"
           name="num4"
-          min="0"
+          min="1"
           max="9"
           defaultValue={list ? list.value[3] : ''}
           className="w-full px-2.5 py-1 border focus:outline-none rounded-md"

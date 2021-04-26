@@ -4,7 +4,6 @@ import { useRecoilState } from 'recoil';
 import { isCustomEditState } from '../States';
 
 const Custom = ({ list, mapNewCustom, searchAns }) => {
-  let method;
   const [isCustom, setIsCustom] = useRecoilState(isCustomEditState);
 
   useEffect(async () => {

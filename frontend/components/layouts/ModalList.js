@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { RiAddCircleLine } from 'react-icons/ri';
 import { BiBomb } from 'react-icons/bi';
 import axios from 'axios';
@@ -18,6 +18,7 @@ import {
   showModalContentState,
   showModalActiveState,
   listAllWidgetsState,
+  defaultShoutState,
 } from '../States';
 
 const ModalList = () => {
@@ -31,6 +32,7 @@ const ModalList = () => {
   const [listAllWidgets, setListAllWidgets] = useRecoilState(
     listAllWidgetsState
   );
+  const [defaultShout, setDefaultShout] = useRecoilState(defaultShoutState);
 
   const openInitialModal = () => {
     setShowModalActive(true);
@@ -52,6 +54,7 @@ const ModalList = () => {
     const temp = _.cloneDeep(listAllWidgets);
     temp.map((data) => {
       if (data.type === 'JustShout') {
+        setDefaultShout(value);
         data.value = value;
       } else {
         if (data.id === listId) {
@@ -74,9 +77,47 @@ const ModalList = () => {
         return res.data.data;
       })
       .catch((error) => {
-        console.log(error);
+        if (!error.response) {
+          alert('please connect database');
+        }
       });
     return data;
+  };
+  const searchWeather = async (value) => {
+    const url =
+      'https://api.openweathermap.org/data/2.5/weather?q=' +
+      value +
+      '&appid=2c486a422a8abed95fca0bbd2c35fc80';
+    try {
+      const { data } = await axios.get(url);
+      const temp = parseInt(data.main.temp - 273);
+      return getJsonData(data, temp);
+    } catch (error) {
+      // setError(true);
+    }
+  };
+
+  const getJsonData = (data, temp) => {
+    return {
+      value: data.name,
+      weather: data.weather[0].main,
+      description: data.weather[0].description,
+      icon:
+        'http://openweathermap.org/img/wn/' + data.weather[0].icon + '@2x.png',
+      temp: temp,
+    };
+  };
+  const onHandleEditWeather = async (listId, value, type = '') => {
+    const weather = await searchWeather(value);
+    const temp = _.cloneDeep(listAllWidgets);
+    temp.map((data) => {
+      if (data.id === listId) {
+        data.value = value;
+        data.weather = weather;
+      }
+    });
+    setListAllWidgets(temp);
+    setShowModalActive(false);
   };
   const onHandleEditCustom = async (listId, value, type = '') => {
     const temp = _.cloneDeep(listAllWidgets);
@@ -112,18 +153,8 @@ const ModalList = () => {
     setListAllWidgets(newData);
   };
 
-  const defaultEditShout = () => {
-    const temp = _.cloneDeep(listAllWidgets);
-    let reversedArray = temp
-      .reverse()
-      .filter((data) => data.type === 'JustShout');
-
-    return reversedArray.length > 0 ? reversedArray[0].value : '';
-  };
-
   const handleOnClick = (type, addType = true, listId = 0, list) => {
     if (type === 'JustSay' || type === 'JustShout') {
-      const defaultValue = defaultEditShout();
       setShowModalContent(
         <FormJustSayAndWeather
           onAdd={onAddListAllWidgetState}
@@ -131,7 +162,7 @@ const ModalList = () => {
           addType={addType}
           listId={listId}
           list={list}
-          defaultValue={defaultValue}
+          defaultValue={defaultShout}
           type={type}
         />
       );
@@ -146,7 +177,7 @@ const ModalList = () => {
       setShowModalContent(
         <FormJustSayAndWeather
           onAdd={onAddListAllWidgetState}
-          onEdit={onHandleEdit}
+          onEdit={onHandleEditWeather}
           addType={addType}
           listId={listId}
           list={list}
@@ -194,6 +225,9 @@ const ModalList = () => {
           onHandleDelete={onHandleDelete}
           mapNewCustom={mapNewCustom}
           searchAns={searchAns}
+          searchWeather={searchWeather}
+          getJsonData={getJsonData}
+          openInitialModal={openInitialModal}
         />
       </div>
     </div>

@@ -1,6 +1,7 @@
-import { list } from 'postcss';
 import { useState } from 'react';
 import Form from '../Form';
+import { useRecoilState } from 'recoil';
+import { defaultShoutState } from '../States';
 const FormJustSayAndWeather = ({
   onEdit,
   addType,
@@ -15,6 +16,7 @@ const FormJustSayAndWeather = ({
   onSubmit = () => {},
 }) => {
   const [error, setError] = useState(null);
+  const [defaultShout, setDefaultShout] = useRecoilState(defaultShoutState);
 
   const validateInput = (value) => {
     const trim = value.trim().length;
@@ -27,9 +29,11 @@ const FormJustSayAndWeather = ({
 
   const handleFormJustSay = (e) => {
     e.preventDefault();
-    if (validateInput(e.target.title.value)) {
+    const value = e.target.title.value;
+    if (validateInput(value)) {
       setError('');
-      onAdd(e.target.title.value, type);
+      onAdd(value, type);
+      if (type === 'JustShout') setDefaultShout(value);
     }
   };
 
@@ -39,6 +43,7 @@ const FormJustSayAndWeather = ({
     if (validateInput(value)) {
       setError('');
       onEdit(listId, value, type);
+      if (type === 'JustShout') setDefaultShout(value);
     }
   };
 

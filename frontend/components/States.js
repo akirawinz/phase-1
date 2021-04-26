@@ -1,5 +1,4 @@
 import { atom } from 'recoil';
-import { useRecoilState } from 'recoil';
 
 export const showModalActiveState = atom({
   key: 'modalActive',
@@ -50,5 +49,10 @@ export const isCustomEditState = atom({
 
 export const coldestCityState = atom({
   key: 'coldestCity',
+  default: '',
+});
+
+export const defaultShoutState = atom({
+  key: 'defaultShout',
   default: '',
 });

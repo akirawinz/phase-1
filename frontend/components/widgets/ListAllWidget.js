@@ -12,6 +12,7 @@ import Timer from '../../components/widgets/Timer';
 import Button from '../Button';
 import CurrentDate from '../../helpers/currentDate';
 import { MdRefresh } from 'react-icons/md';
+import { useEffect } from 'react';
 import {
   listAllWidgetsState,
   showModalActiveState,
@@ -19,6 +20,8 @@ import {
 } from '../States';
 
 const ListAllWidget = ({
+  searchWeather,
+  getJsonData,
   mapNewCustom,
   onHandleDelete,
   openInitialModal,
@@ -36,6 +39,21 @@ const ListAllWidget = ({
     return b.id - a.id;
   });
   const [onRefresh, setOnRefresh] = useRecoilState(onRefreshState);
+
+  useEffect(() => {
+    if (listAllWidgets.length > 0) {
+      localStorage.setItem('listAllWidgets', JSON.stringify(listAllWidgets));
+    }
+  }, [listAllWidgets]);
+
+  useEffect(() => {
+    let data = localStorage.getItem('listAllWidgets');
+    data = JSON.parse(data);
+    console.log(data);
+    if (data) {
+      if (data.length > 0) setListAllWidgets(data);
+    }
+  }, []);
 
   const mapNewData = (list, value) => {
     const temp = _.cloneDeep(listAllWidgets);
@@ -60,18 +78,6 @@ const ListAllWidget = ({
     });
     setListAllWidgets(mapData);
   };
-  // const mapNewCustom = (list, method) => {
-  //   const temp = _.cloneDeep(listAllWidgets);
-  //   const mapData = temp.map((data) => {
-  //     if (data.id === list.id) {
-  //       console.log('xx');
-  //       return { ...data, method: method };
-  //     } else {
-  //       return data;
-  //     }
-  //   });
-  //   setListAllWidgets(mapData);
-  // };
 
   if (getAllListWidgets.length > 0) {
     return getAllListWidgets.map((list) => {
@@ -139,7 +145,12 @@ const ListAllWidget = ({
                   <MdEdit />
                 </Button>
               </div>
-              <Weather list={list} mapNewDate={mapNewDate} />
+              <Weather
+                list={list}
+                mapNewDate={mapNewDate}
+                searchWeather={searchWeather}
+                getJsonData={getJsonData}
+              />
             </Card>
           );
           break;
