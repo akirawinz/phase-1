@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Button from '../Button';
 import { useRecoilState } from 'recoil';
 import { isCustomEditState } from '../States';
+import { GiConsoleController } from 'react-icons/gi';
 
 const FormCustom = ({
   addType,

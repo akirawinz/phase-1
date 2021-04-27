@@ -20,8 +20,6 @@ import {
 
 const ListAllWidget = ({
   searchWeather,
-  getJsonData,
-  mapNewCustom,
   onHandleDelete,
   openInitialModal,
   handleOnClick,
@@ -57,25 +55,35 @@ const ListAllWidget = ({
   const mapNewData = (list, value) => {
     const temp = _.cloneDeep(listAllWidgets);
     const mapData = temp.map((data) => {
-      if (data.id === list.id) {
-        return { ...data, value };
-      } else {
-        return data;
+      switch (list.type) {
+        case 'Weather':
+          if (data.id === list.id) {
+            data.currentTime = CurrentDate();
+            return { ...data, weather: value };
+          } else {
+            return data;
+          }
+          break;
+
+        case 'Custom':
+          console.log('newData');
+          if (data.id === list.id) {
+            return { ...data, method: value };
+          } else {
+            return data;
+          }
+          break;
+
+        default:
+          if (data.id === list.id) {
+            console.log('xx');
+            return { ...data, value };
+          } else {
+            return data;
+          }
+          break;
       }
     });
-    setListAllWidgets(mapData);
-  };
-  const mapNewDate = (list, weather) => {
-    const temp = _.cloneDeep(listAllWidgets);
-    const mapData = temp.map((data) => {
-      if (data.id === list.id) {
-        data.currentTime = CurrentDate();
-        return { ...data, weather };
-      } else {
-        return data;
-      }
-    });
-    console.log(temp);
     setListAllWidgets(mapData);
   };
 
@@ -147,9 +155,8 @@ const ListAllWidget = ({
               </div>
               <Weather
                 list={list}
-                mapNewDate={mapNewDate}
+                mapNewData={mapNewData}
                 searchWeather={searchWeather}
-                getJsonData={getJsonData}
               />
             </Card>
           );
@@ -222,7 +229,7 @@ const ListAllWidget = ({
               </div>
               <Custom
                 list={list}
-                mapNewCustom={mapNewCustom}
+                mapNewData={mapNewData}
                 searchAns={searchAns}
               />
             </Card>

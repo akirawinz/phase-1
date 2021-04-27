@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import { onRefreshState } from '../States';
 import { useRecoilState } from 'recoil';
 
-const Weather = ({ list, mapNewDate, getJsonData }) => {
+const Weather = ({ list, mapNewData }) => {
   const [onRefresh, setOnRefresh] = useRecoilState(onRefreshState);
   const [error, setError] = useState(false);
   const value = list.value;
@@ -24,17 +24,20 @@ const Weather = ({ list, mapNewDate, getJsonData }) => {
       // setError(true);
     }
   };
-
-  useEffect(async () => {
-    // const getJson = await searchWeather(value);
-    // await mapNewDate(list, getJson);
-    // setError(false);
-    // console.log('xx');
-  }, []);
+  const getJsonData = (data, temp) => {
+    return {
+      value: data.name,
+      weather: data.weather[0].main,
+      description: data.weather[0].description,
+      icon:
+        'http://openweathermap.org/img/wn/' + data.weather[0].icon + '@2x.png',
+      temp: temp,
+    };
+  };
 
   useEffect(async () => {
     const getJson = await searchWeather(value);
-    await mapNewDate(list, getJson);
+    await mapNewData(list, getJson);
     setError(false);
   }, [list.value]);
 

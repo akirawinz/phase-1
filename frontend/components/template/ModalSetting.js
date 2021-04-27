@@ -62,6 +62,7 @@ const ModalSetting = ({ onEdit }) => {
     }
     return coldest;
   };
+
   const clearAll = () => {
     setListAllWidgets([]);
     setTotalJustSay(0);

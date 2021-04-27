@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { RiAddCircleLine } from 'react-icons/ri';
 import { BiBomb } from 'react-icons/bi';
-import axios from 'axios';
 import Button from '../Button';
 import Modal from '../Modal';
 import WidgetModalList from '../layouts/WidgetModalList';
@@ -70,11 +69,6 @@ const ModalList = () => {
           setDefaultShout(value);
           data.value = value;
           break;
-        case 'Weather':
-          if (data.id === listId) {
-            data.value = value;
-          }
-          break;
         default:
           if (data.id === listId) {
             data.value = value;
@@ -82,64 +76,23 @@ const ModalList = () => {
           break;
       }
     });
-    console.log(temp);
     setListAllWidgets(temp);
     setShowModalActive(false);
   };
 
-  const searchAns = async (list) => {
-    const url = 'http://localhost:3333/api/test';
-    let payload = {
-      data: list.value,
-    };
-    const data = await axios
-      .post(url, payload)
-      .then((res) => {
-        return res.data.data;
-      })
-      .catch((error) => {
-        if (!error.response) {
-          alert('please connect database');
-        }
-      });
-    return data;
-  };
-
-  const getJsonData = (data, temp) => {
-    return {
-      value: data.name,
-      weather: data.weather[0].main,
-      description: data.weather[0].description,
-      icon:
-        'http://openweathermap.org/img/wn/' + data.weather[0].icon + '@2x.png',
-      temp: temp,
-    };
-  };
-  // const onHandleEditWeather = async (listId, value, type = '') => {
-  //   const weather = await searchWeather(value);
+  // const onHandleEditCustom = async (listId, value, type = '') => {
   //   const temp = _.cloneDeep(listAllWidgets);
+  //   const list = { value };
+  //   const method = await searchAns(list);
   //   temp.map((data) => {
   //     if (data.id === listId) {
   //       data.value = value;
-  //       data.weather = weather;
+  //       data.method = method;
   //     }
   //   });
   //   setListAllWidgets(temp);
   //   setShowModalActive(false);
   // };
-  const onHandleEditCustom = async (listId, value, type = '') => {
-    const temp = _.cloneDeep(listAllWidgets);
-    const list = { value };
-    const method = await searchAns(list);
-    temp.map((data) => {
-      if (data.id === listId) {
-        data.value = value;
-        data.method = method;
-      }
-    });
-    setListAllWidgets(temp);
-    setShowModalActive(false);
-  };
 
   const mapNewCustom = (list, method) => {
     const temp = _.cloneDeep(listAllWidgets);
@@ -199,7 +152,7 @@ const ModalList = () => {
           type={type}
           onAdd={onAddListAllWidgetState}
           addType={addType}
-          onEdit={onHandleEditCustom}
+          onEdit={onHandleEdit}
           list={list}
         />
       );
@@ -233,8 +186,6 @@ const ModalList = () => {
           handleOnClick={handleOnClick}
           onHandleDelete={onHandleDelete}
           mapNewCustom={mapNewCustom}
-          searchAns={searchAns}
-          getJsonData={getJsonData}
           openInitialModal={openInitialModal}
         />
       </div>

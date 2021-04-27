@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react';
 
 import { useRecoilState } from 'recoil';
 import { isCustomEditState } from '../States';
-
-const Custom = ({ list, mapNewCustom }) => {
+import axios from 'axios';
+const Custom = ({ list, mapNewData }) => {
   const [isCustom, setIsCustom] = useRecoilState(isCustomEditState);
 
   const searchAns = async (list) => {
@@ -25,11 +25,11 @@ const Custom = ({ list, mapNewCustom }) => {
   };
 
   useEffect(async () => {
-    if (isCustom) {
-      const method = await searchAns(list);
-      mapNewCustom(list, method);
-    }
-    setIsCustom(false);
+    const method = await searchAns(list);
+    console.log(method);
+    // await mapNewData(list, getJson);
+    // await mapNewData(list, method);
+    // setIsCustom(false);
   }, [list]);
 
   const displayInput = () => {
