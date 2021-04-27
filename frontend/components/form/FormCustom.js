@@ -25,7 +25,7 @@ const FormCustom = ({
     e.preventDefault();
     const arr = getArr(e);
     onAdd(arr, 'Custom');
-    setIsCustom(true);
+    // setIsCustom(true);
   };
 
   const getArr = (e) => {

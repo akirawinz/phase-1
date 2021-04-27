@@ -64,9 +64,7 @@ const ListAllWidget = ({
             return data;
           }
           break;
-
         case 'Custom':
-          console.log('newData');
           if (data.id === list.id) {
             return { ...data, method: value };
           } else {

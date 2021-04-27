@@ -27,9 +27,7 @@ const Custom = ({ list, mapNewData }) => {
   useEffect(async () => {
     const method = await searchAns(list);
     console.log(method);
-    // await mapNewData(list, getJson);
-    // await mapNewData(list, method);
-    // setIsCustom(false);
+    await mapNewData(list, method);
   }, [list]);
 
   const displayInput = () => {
