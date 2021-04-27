@@ -3,8 +3,26 @@ import { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { isCustomEditState } from '../States';
 
-const Custom = ({ list, mapNewCustom, searchAns }) => {
+const Custom = ({ list, mapNewCustom }) => {
   const [isCustom, setIsCustom] = useRecoilState(isCustomEditState);
+
+  const searchAns = async (list) => {
+    const url = 'http://localhost:3333/api/test';
+    let payload = {
+      data: list.value,
+    };
+    const data = await axios
+      .post(url, payload)
+      .then((res) => {
+        return res.data.data;
+      })
+      .catch((error) => {
+        if (!error.response) {
+          alert('please connect database');
+        }
+      });
+    return data;
+  };
 
   useEffect(async () => {
     if (isCustom) {

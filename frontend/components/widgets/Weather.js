@@ -4,17 +4,39 @@ import classNames from 'classnames';
 import { onRefreshState } from '../States';
 import { useRecoilState } from 'recoil';
 
-const Weather = ({ list, mapNewDate, searchWeather, getJsonData }) => {
+const Weather = ({ list, mapNewDate, getJsonData }) => {
   const [onRefresh, setOnRefresh] = useRecoilState(onRefreshState);
   const [error, setError] = useState(false);
   const value = list.value;
   const weather = list.weather;
   const icon = weather ? weather.icon : '';
+
+  const searchWeather = async (value) => {
+    const url =
+      'https://api.openweathermap.org/data/2.5/weather?q=' +
+      value +
+      '&appid=2c486a422a8abed95fca0bbd2c35fc80';
+    try {
+      const { data } = await axios.get(url);
+      const temp = parseInt(data.main.temp - 273);
+      return getJsonData(data, temp);
+    } catch (error) {
+      // setError(true);
+    }
+  };
+
+  useEffect(async () => {
+    // const getJson = await searchWeather(value);
+    // await mapNewDate(list, getJson);
+    // setError(false);
+    // console.log('xx');
+  }, []);
+
   useEffect(async () => {
     const getJson = await searchWeather(value);
     await mapNewDate(list, getJson);
     setError(false);
-  }, [value]);
+  }, [list.value]);
 
   useEffect(() => {
     if (onRefresh) {

@@ -12,7 +12,6 @@ import Timer from '../../components/widgets/Timer';
 import Button from '../Button';
 import CurrentDate from '../../helpers/currentDate';
 import { MdRefresh } from 'react-icons/md';
-import { useEffect } from 'react';
 import {
   listAllWidgetsState,
   showModalActiveState,
@@ -40,20 +39,20 @@ const ListAllWidget = ({
   });
   const [onRefresh, setOnRefresh] = useRecoilState(onRefreshState);
 
-  useEffect(() => {
-    if (listAllWidgets.length > 0) {
-      localStorage.setItem('listAllWidgets', JSON.stringify(listAllWidgets));
-    }
-  }, [listAllWidgets]);
+  // useEffect(() => {
+  //   if (listAllWidgets.length > 0) {
+  //     localStorage.setItem('listAllWidgets', JSON.stringify(listAllWidgets));
+  //   }
+  // }, [listAllWidgets]);
 
-  useEffect(() => {
-    let data = localStorage.getItem('listAllWidgets');
-    data = JSON.parse(data);
-    console.log(data);
-    if (data) {
-      if (data.length > 0) setListAllWidgets(data);
-    }
-  }, []);
+  // useEffect(() => {
+  //   let data = localStorage.getItem('listAllWidgets');
+  //   data = JSON.parse(data);
+  //   console.log(data);
+  //   if (data) {
+  //     if (data.length > 0) setListAllWidgets(data);
+  //   }
+  // }, []);
 
   const mapNewData = (list, value) => {
     const temp = _.cloneDeep(listAllWidgets);
@@ -76,6 +75,7 @@ const ListAllWidget = ({
         return data;
       }
     });
+    console.log(temp);
     setListAllWidgets(mapData);
   };
 

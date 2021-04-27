@@ -2,7 +2,7 @@ import { useState } from 'react';
 import Form from '../Form';
 import { useRecoilState } from 'recoil';
 import { defaultShoutState } from '../States';
-const FormJustSayAndWeather = ({
+const FormInputText = ({
   onEdit,
   addType,
   listId,
@@ -48,8 +48,8 @@ const FormJustSayAndWeather = ({
   };
 
   let initialValue;
-  if (addType && type === 'JustShout') {
-    initialValue = defaultValue;
+  if (type === 'JustShout') {
+    initialValue = defaultShout;
   } else if (list) {
     initialValue = list.value;
   }
@@ -74,4 +74,4 @@ const FormJustSayAndWeather = ({
     </>
   );
 };
-export default FormJustSayAndWeather;
+export default FormInputText;

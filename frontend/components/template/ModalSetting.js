@@ -4,7 +4,7 @@ import Card from '../template/Card';
 import Form from '../Form';
 import Button from '../Button';
 import getMinSecond from '../../helpers/calculateTime';
-import FormJustSayAndWeather from '../form/FormJustSayAndWeather';
+import FormInputText from '../form/FormInputText';
 import {
   showModalActiveState,
   totalCounterState,
@@ -14,6 +14,7 @@ import {
   zeroState,
   listAllWidgetsState,
   coldestCityState,
+  defaultShoutState,
 } from '../States';
 const ModalSetting = ({ onEdit }) => {
   const [showModalActive, setShowModalActive] = useRecoilState(
@@ -28,6 +29,7 @@ const ModalSetting = ({ onEdit }) => {
   );
   const [coldestCity, setColdestCity] = useRecoilState(coldestCityState);
   const [zero, setZero] = useRecoilState(zeroState);
+  const [defaultShout, setDefaultShout] = useRecoilState(defaultShoutState);
 
   useEffect(() => {
     if (listAllWidgets.length > 0) {
@@ -42,6 +44,7 @@ const ModalSetting = ({ onEdit }) => {
       setTotalWidget(listAllWidgets.length);
       setTotalTimer(getMinSecond(getTotalTimer));
     }
+    console.log(defaultShout);
   }, [listAllWidgets]);
   const getDataColdestCity = (temp) => {
     let coldest = temp
@@ -66,6 +69,7 @@ const ModalSetting = ({ onEdit }) => {
     setTotalWidget(0);
     setTotalTimer('00:00:00');
     setShowModalActive(false);
+    setDefaultShout('');
   };
 
   const getFinalTotalJustSayLength = (temp) => {
@@ -137,7 +141,7 @@ const ModalSetting = ({ onEdit }) => {
         </div>
       </Card>
       <Card title={'JustShout Text'} fullCard={true}>
-        <FormJustSayAndWeather
+        <FormInputText
           onEdit={onEdit}
           addType={false}
           title={'Edit'}

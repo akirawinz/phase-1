@@ -8,7 +8,7 @@ import WidgetModalList from '../layouts/WidgetModalList';
 import ModalSetting from '../template/ModalSetting';
 import ListAllWidget from '../widgets/ListAllWidget';
 import GetJson from '../../helpers/getJsonFormat';
-import FormJustSayAndWeather from '../form/FormJustSayAndWeather';
+import FormInputText from '../form/FormInputText';
 import FormCounter from '../form/FormCounter';
 import FormCustom from '../form/FormCustom';
 import _ from 'lodash';
@@ -62,18 +62,27 @@ const ModalList = () => {
     setShowModalActive(false);
   };
 
-  const onHandleEdit = (listId, value, type = '') => {
+  const onHandleEdit = (listId, value, type = '', newValue) => {
     const temp = _.cloneDeep(listAllWidgets);
     temp.map((data) => {
-      if (data.type === 'JustShout') {
-        setDefaultShout(value);
-        data.value = value;
-      } else {
-        if (data.id === listId) {
+      switch (data.type) {
+        case 'JustShout':
+          setDefaultShout(value);
           data.value = value;
-        }
+          break;
+        case 'Weather':
+          if (data.id === listId) {
+            data.value = value;
+          }
+          break;
+        default:
+          if (data.id === listId) {
+            data.value = value;
+          }
+          break;
       }
     });
+    console.log(temp);
     setListAllWidgets(temp);
     setShowModalActive(false);
   };
@@ -95,19 +104,6 @@ const ModalList = () => {
       });
     return data;
   };
-  const searchWeather = async (value) => {
-    const url =
-      'https://api.openweathermap.org/data/2.5/weather?q=' +
-      value +
-      '&appid=2c486a422a8abed95fca0bbd2c35fc80';
-    try {
-      const { data } = await axios.get(url);
-      const temp = parseInt(data.main.temp - 273);
-      return getJsonData(data, temp);
-    } catch (error) {
-      // setError(true);
-    }
-  };
 
   const getJsonData = (data, temp) => {
     return {
@@ -119,18 +115,18 @@ const ModalList = () => {
       temp: temp,
     };
   };
-  const onHandleEditWeather = async (listId, value, type = '') => {
-    const weather = await searchWeather(value);
-    const temp = _.cloneDeep(listAllWidgets);
-    temp.map((data) => {
-      if (data.id === listId) {
-        data.value = value;
-        data.weather = weather;
-      }
-    });
-    setListAllWidgets(temp);
-    setShowModalActive(false);
-  };
+  // const onHandleEditWeather = async (listId, value, type = '') => {
+  //   const weather = await searchWeather(value);
+  //   const temp = _.cloneDeep(listAllWidgets);
+  //   temp.map((data) => {
+  //     if (data.id === listId) {
+  //       data.value = value;
+  //       data.weather = weather;
+  //     }
+  //   });
+  //   setListAllWidgets(temp);
+  //   setShowModalActive(false);
+  // };
   const onHandleEditCustom = async (listId, value, type = '') => {
     const temp = _.cloneDeep(listAllWidgets);
     const list = { value };
@@ -168,7 +164,7 @@ const ModalList = () => {
   const handleOnClick = (type, addType = true, listId = 0, list) => {
     if (type === 'JustSay' || type === 'JustShout') {
       setShowModalContent(
-        <FormJustSayAndWeather
+        <FormInputText
           onAdd={onAddListAllWidgetState}
           onEdit={onHandleEdit}
           addType={addType}
@@ -187,9 +183,9 @@ const ModalList = () => {
     }
     if (type === 'Weather') {
       setShowModalContent(
-        <FormJustSayAndWeather
+        <FormInputText
           onAdd={onAddListAllWidgetState}
-          onEdit={onHandleEditWeather}
+          onEdit={onHandleEdit}
           addType={addType}
           listId={listId}
           list={list}
@@ -217,6 +213,7 @@ const ModalList = () => {
       </Modal>
     );
   };
+
   return (
     <div className="pt-3">
       <div className="mb-4">
@@ -237,7 +234,6 @@ const ModalList = () => {
           onHandleDelete={onHandleDelete}
           mapNewCustom={mapNewCustom}
           searchAns={searchAns}
-          searchWeather={searchWeather}
           getJsonData={getJsonData}
           openInitialModal={openInitialModal}
         />
