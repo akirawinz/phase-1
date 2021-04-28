@@ -43,26 +43,25 @@ const ListAllWidget = ({
 
   const [onRefresh, setOnRefresh] = useRecoilState(onRefreshState);
 
-  useEffect(() => {
-    if (listAllWidgets.length > 0) {
-      localStorage.setItem('listAllWidgets', JSON.stringify(listAllWidgets));
-      localStorage.setItem('defaultShout', JSON.stringify(defaultShout));
-    }
-  }, [listAllWidgets]);
+  // useEffect(() => {
+  //   if (listAllWidgets.length > 0) {
+  //     localStorage.setItem('listAllWidgets', JSON.stringify(listAllWidgets));
+  //     localStorage.setItem('defaultShout', JSON.stringify(defaultShout));
+  //   }
+  // }, [listAllWidgets]);
 
-  useEffect(() => {
-    let localStorageListAllWidget = localStorage.getItem('listAllWidgets');
-    localStorageListAllWidget = JSON.parse(localStorageListAllWidget);
-    console.log('aa', localStorageListAllWidget);
-    let localStorageDefaultShout = localStorage.getItem('defaultShout');
-    localStorageDefaultShout = JSON.parse(localStorageDefaultShout);
-    if (localStorageListAllWidget) {
-      if (localStorageListAllWidget.length > 0) {
-        setListAllWidgets(localStorageListAllWidget);
-        setDefaultShout(localStorageDefaultShout);
-      }
-    }
-  }, []);
+  // useEffect(() => {
+  //   let localStorageListAllWidget = localStorage.getItem('listAllWidgets');
+  //   localStorageListAllWidget = JSON.parse(localStorageListAllWidget);
+  //   let localStorageDefaultShout = localStorage.getItem('defaultShout');
+  //   localStorageDefaultShout = JSON.parse(localStorageDefaultShout);
+  //   if (localStorageListAllWidget) {
+  //     if (localStorageListAllWidget.length > 0) {
+  //       setListAllWidgets(localStorageListAllWidget);
+  //       setDefaultShout(localStorageDefaultShout);
+  //     }
+  //   }
+  // }, []);
 
   const mapNewData = (list, value) => {
     const temp = _.cloneDeep(listAllWidgets);

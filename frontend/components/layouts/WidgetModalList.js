@@ -5,8 +5,13 @@ import WidgetModal from '../widgets/WidgetModal';
 import { HiOutlineSpeakerphone } from 'react-icons/hi';
 import { TiWeatherPartlySunny } from 'react-icons/ti';
 import { GiAbstract024 } from 'react-icons/gi';
+import ModalContent from '../template/ModalContent';
 const WidgetModalList = ({ handleOnClick }) => {
   const iconClass = 'text-4xl mx-auto';
+
+  // const test = () => {
+  //   return <ModalContent />;
+  // };
 
   return (
     <>
