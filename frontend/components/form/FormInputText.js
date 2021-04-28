@@ -9,7 +9,6 @@ const FormInputText = ({
   list,
   onAdd,
   type,
-  defaultValue,
   title,
   setting,
   disabled = false,
@@ -27,7 +26,7 @@ const FormInputText = ({
     return true;
   };
 
-  const handleFormJustSay = (e) => {
+  const handleFormInput = (e) => {
     e.preventDefault();
     const value = e.target.title.value;
     if (validateInput(value)) {
@@ -37,7 +36,7 @@ const FormInputText = ({
     }
   };
 
-  const handleFormEditJustSay = (e) => {
+  const handleFormEditInput = (e) => {
     e.preventDefault();
     const value = e.target.title.value;
     if (validateInput(value)) {
@@ -63,7 +62,7 @@ const FormInputText = ({
     <>
       <div className="text-xl mb-1">{titleForm}</div>
       <Form
-        onSubmit={addType ? handleFormJustSay : handleFormEditJustSay}
+        onSubmit={addType ? handleFormInput : handleFormEditInput}
         error={error}
         type={'text'}
         name={'title'}

@@ -2,6 +2,7 @@ import { useRecoilState } from 'recoil';
 import { MdEdit } from 'react-icons/md';
 import { IoMdClose } from 'react-icons/io';
 import _ from 'lodash';
+import { useEffect } from 'react';
 import Card from '../../components/template/Card';
 import CardNone from '../template/CardNone';
 import JustSay from '../../components/widgets/JustSay';
@@ -16,10 +17,11 @@ import {
   listAllWidgetsState,
   showModalActiveState,
   onRefreshState,
+  zeroState,
+  defaultShoutState,
 } from '../States';
 
 const ListAllWidget = ({
-  searchWeather,
   onHandleDelete,
   openInitialModal,
   handleOnClick,
@@ -31,26 +33,36 @@ const ListAllWidget = ({
   const [showModalActive, setShowModalActive] = useRecoilState(
     showModalActiveState
   );
+  const [defaultShout, setDefaultShout] = useRecoilState(defaultShoutState);
+
+  const [zero, setZero] = useRecoilState(zeroState);
 
   const getAllListWidgets = listAllWidgets.slice().sort((a, b) => {
     return b.id - a.id;
   });
+
   const [onRefresh, setOnRefresh] = useRecoilState(onRefreshState);
 
-  // useEffect(() => {
-  //   if (listAllWidgets.length > 0) {
-  //     localStorage.setItem('listAllWidgets', JSON.stringify(listAllWidgets));
-  //   }
-  // }, [listAllWidgets]);
+  useEffect(() => {
+    if (listAllWidgets.length > 0) {
+      localStorage.setItem('listAllWidgets', JSON.stringify(listAllWidgets));
+      localStorage.setItem('defaultShout', JSON.stringify(defaultShout));
+    }
+  }, [listAllWidgets]);
 
-  // useEffect(() => {
-  //   let data = localStorage.getItem('listAllWidgets');
-  //   data = JSON.parse(data);
-  //   console.log(data);
-  //   if (data) {
-  //     if (data.length > 0) setListAllWidgets(data);
-  //   }
-  // }, []);
+  useEffect(() => {
+    let localStorageListAllWidget = localStorage.getItem('listAllWidgets');
+    localStorageListAllWidget = JSON.parse(localStorageListAllWidget);
+    console.log('aa', localStorageListAllWidget);
+    let localStorageDefaultShout = localStorage.getItem('defaultShout');
+    localStorageDefaultShout = JSON.parse(localStorageDefaultShout);
+    if (localStorageListAllWidget) {
+      if (localStorageListAllWidget.length > 0) {
+        setListAllWidgets(localStorageListAllWidget);
+        setDefaultShout(localStorageDefaultShout);
+      }
+    }
+  }, []);
 
   const mapNewData = (list, value) => {
     const temp = _.cloneDeep(listAllWidgets);
@@ -72,9 +84,21 @@ const ListAllWidget = ({
           }
           break;
 
+        case 'timer':
+          if (zero === 'timer' && data.type === 'timer') {
+            setZero('');
+            return { ...data, value: 0 };
+          }
+          if (data.id === list.id) {
+            return { ...data, value };
+          } else {
+            return data;
+          }
+
+          break;
+
         default:
           if (data.id === list.id) {
-            console.log('xx');
             return { ...data, value };
           } else {
             return data;
@@ -85,6 +109,49 @@ const ListAllWidget = ({
     setListAllWidgets(mapData);
   };
 
+  const buttonDeleteAndEdit = (list) => {
+    let refreshButton;
+    let editButton;
+    if (list.type === 'Weather') {
+      refreshButton = (
+        <Button
+          icon={true}
+          onClick={() => {
+            setOnRefresh(true);
+          }}
+        >
+          <MdRefresh />
+        </Button>
+      );
+    }
+    if (list.type !== 'timer' && list.type !== 'counter') {
+      editButton = (
+        <Button
+          icon={true}
+          onClick={() => {
+            handleOnClick(list.type, false, list.id, list);
+            setShowModalActive(true);
+          }}
+        >
+          <MdEdit />
+        </Button>
+      );
+    }
+    return (
+      <div className="absolute top-5 right-5">
+        {refreshButton}
+        {editButton}
+        <Button
+          icon={true}
+          onClick={() => {
+            onHandleDelete(list.id);
+          }}
+        >
+          <IoMdClose />
+        </Button>
+      </div>
+    );
+  };
   if (getAllListWidgets.length > 0) {
     return getAllListWidgets.map((list) => {
       switch (list.type) {
@@ -92,25 +159,7 @@ const ListAllWidget = ({
         case 'JustSay':
           return (
             <Card title={list.type} key={list.id}>
-              <div className="absolute top-5 right-5">
-                <Button
-                  icon={true}
-                  onClick={() => {
-                    onHandleDelete(list.id);
-                  }}
-                >
-                  <IoMdClose />
-                </Button>
-                <Button
-                  icon={true}
-                  onClick={() => {
-                    handleOnClick(list.type, false, list.id, list);
-                    setShowModalActive(true);
-                  }}
-                >
-                  <MdEdit />
-                </Button>
-              </div>
+              {buttonDeleteAndEdit(list)}
               <JustSay justSayTitle={list.value} />
             </Card>
           );
@@ -122,40 +171,8 @@ const ListAllWidget = ({
               key={list.id}
               currentTime={list.currentTime}
             >
-              <div className="absolute top-5 right-5">
-                <Button
-                  icon={true}
-                  onClick={() => {
-                    setOnRefresh(true);
-                  }}
-                >
-                  <MdRefresh />
-                </Button>
-
-                <Button
-                  icon={true}
-                  onClick={() => {
-                    onHandleDelete(list.id);
-                  }}
-                >
-                  <IoMdClose />
-                </Button>
-
-                <Button
-                  icon={true}
-                  onClick={() => {
-                    handleOnClick(list.type, false, list.id, list);
-                    setShowModalActive(true);
-                  }}
-                >
-                  <MdEdit />
-                </Button>
-              </div>
-              <Weather
-                list={list}
-                mapNewData={mapNewData}
-                searchWeather={searchWeather}
-              />
+              {buttonDeleteAndEdit(list)}
+              <Weather list={list} mapNewData={mapNewData} />
             </Card>
           );
           break;
@@ -163,16 +180,7 @@ const ListAllWidget = ({
         case 'timer':
           return (
             <Card title="Timer" key={list.id}>
-              <div className="absolute top-5 right-5">
-                <Button
-                  icon={true}
-                  onClick={() => {
-                    onHandleDelete(list.id);
-                  }}
-                >
-                  <IoMdClose />
-                </Button>
-              </div>
+              {buttonDeleteAndEdit(list)}
               <Timer
                 listAllWidgets={listAllWidgets}
                 list={list}
@@ -185,16 +193,7 @@ const ListAllWidget = ({
         case 'counter':
           return (
             <Card title="Counter" key={list.id}>
-              <div className="absolute top-5 right-5">
-                <Button
-                  icon={true}
-                  onClick={() => {
-                    onHandleDelete(list.id);
-                  }}
-                >
-                  <IoMdClose />
-                </Button>
-              </div>
+              {buttonDeleteAndEdit(list)}
               <Counter
                 list={list}
                 getNum={list.value}
@@ -206,25 +205,7 @@ const ListAllWidget = ({
         case 'Custom':
           return (
             <Card title="Custom" key={list.id}>
-              <div className="absolute top-5 right-5">
-                <Button
-                  icon={true}
-                  onClick={() => {
-                    onHandleDelete(list.id);
-                  }}
-                >
-                  <IoMdClose />
-                </Button>
-                <Button
-                  icon={true}
-                  onClick={() => {
-                    handleOnClick(list.type, false, list.id, list);
-                    setShowModalActive(true);
-                  }}
-                >
-                  <MdEdit />
-                </Button>
-              </div>
+              {buttonDeleteAndEdit(list)}
               <Custom
                 list={list}
                 mapNewData={mapNewData}

@@ -5,44 +5,55 @@ import { isCustomEditState } from '../States';
 import axios from 'axios';
 const Custom = ({ list, mapNewData }) => {
   const [isCustom, setIsCustom] = useRecoilState(isCustomEditState);
+  const [allData, setAllData] = useState([]);
 
   const searchAns = async (list) => {
     const url = 'http://localhost:3333/api/test';
     let payload = {
       data: list.value,
     };
-    const data = await axios
-      .post(url, payload)
-      .then((res) => {
-        return res.data.data;
-      })
-      .catch((error) => {
-        if (!error.response) {
-          alert('please connect database');
-        }
-      });
-    return data;
+    try {
+      const { data } = await axios.post(url, payload);
+      return data.data;
+    } catch (error) {
+      if (!error.response) {
+        alert('please connect database');
+      }
+    }
   };
 
+  // const prevArr = useRef();
+  // useEffect(() => {
+  //   if (JSON.stringify(prevArr.current) !== JSON.stringify(arr)) {
+  //     prevArr.current = [...arr];
+  //   }
+  // }, [list.value]);
+
   useEffect(async () => {
-    const method = await searchAns(list);
-    console.log(method);
-    await mapNewData(list, method);
-  }, [list]);
+    if (isCustom) {
+      const method = await searchAns(list);
+      await mapNewData(list);
+      setAllData(method);
+      setIsCustom(false);
+    }
+  }, [list.value]);
 
   const displayInput = () => {
-    return list.value.map((data, index) => {
-      return (
-        <span className="class" key={index}>
-          {data + ' '}
-        </span>
-      );
-    });
+    console.log(list);
+    if (list) {
+      return list.value.map((data, index) => {
+        return (
+          <span className="class" key={index}>
+            {data + ' '}
+          </span>
+        );
+      });
+    }
   };
 
   const answer = () => {
-    if (list.method) {
-      return list.method.map((data, index) => {
+    if (allData.length > 0) {
+      return allData.map((data, index) => {
         return (
           <div key={index}>
             <span className="text-left">method : </span>
@@ -55,13 +66,11 @@ const Custom = ({ list, mapNewData }) => {
     }
   };
   return (
-    <>
-      <div className="text-center my-8">
-        <span className="text-xl">Input: {displayInput()}</span>
-        <h3 className="text-red-500 my-2">OutPut:</h3>
-        <ul> {answer()}</ul>
-      </div>
-    </>
+    <div className="text-center my-8">
+      <span className="text-xl">Input: {displayInput()}</span>
+      <h3 className="text-red-500 my-2">OutPut:</h3>
+      <ul> {answer()}</ul>
+    </div>
   );
 };
 

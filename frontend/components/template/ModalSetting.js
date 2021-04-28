@@ -1,9 +1,7 @@
-import { useRecoilState } from 'recoil';
-import { useEffect } from 'react';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import Card from '../template/Card';
 import Form from '../Form';
 import Button from '../Button';
-import getMinSecond from '../../helpers/calculateTime';
 import FormInputText from '../form/FormInputText';
 import {
   showModalActiveState,
@@ -20,79 +18,21 @@ const ModalSetting = ({ onEdit }) => {
   const [showModalActive, setShowModalActive] = useRecoilState(
     showModalActiveState
   );
-  const [totalJustSay, setTotalJustSay] = useRecoilState(totalJustSayState);
-  const [totalCounter, setTotalCounter] = useRecoilState(totalCounterState);
-  const [totalTimer, setTotalTimer] = useRecoilState(totalTimerState);
-  const [totalWidget, setTotalWidget] = useRecoilState(totalWidgetState);
+  const totalCounter = useRecoilValue(totalCounterState);
+  const totalTimer = useRecoilValue(totalTimerState);
+  const totalJustSay = useRecoilValue(totalJustSayState);
+  const totalWidget = useRecoilValue(totalWidgetState);
   const [listAllWidgets, setListAllWidgets] = useRecoilState(
     listAllWidgetsState
   );
-  const [coldestCity, setColdestCity] = useRecoilState(coldestCityState);
+  const coldestCity = useRecoilValue(coldestCityState);
   const [zero, setZero] = useRecoilState(zeroState);
   const [defaultShout, setDefaultShout] = useRecoilState(defaultShoutState);
 
-  useEffect(() => {
-    if (listAllWidgets.length > 0) {
-      const temp = _.cloneDeep(listAllWidgets);
-      const getTotalTimer = getFinalToTalTimerOrCounter(temp, 'timer');
-      const getTotalCounter = getFinalToTalTimerOrCounter(temp, 'counter');
-      const getTotalJustSayLength = getFinalTotalJustSayLength(temp);
-      const getColdestCity = getDataColdestCity(temp);
-      setColdestCity(getColdestCity);
-      setTotalJustSay(getTotalJustSayLength);
-      setTotalCounter(getTotalCounter);
-      setTotalWidget(listAllWidgets.length);
-      setTotalTimer(getMinSecond(getTotalTimer));
-    }
-    console.log(defaultShout);
-  }, [listAllWidgets]);
-  const getDataColdestCity = (temp) => {
-    let coldest = temp
-      .filter((data) => data.type === 'Weather')
-      .map((data) => {
-        if (data.weather) {
-          return { name: data.weather.value, temp: data.weather.temp };
-        }
-      })
-      .sort((a, b) => a.temp - b.temp);
-    if (coldest[0]) {
-      coldest = coldest[0].name;
-    } else {
-      coldest = '';
-    }
-    return coldest;
-  };
-
   const clearAll = () => {
     setListAllWidgets([]);
-    setTotalJustSay(0);
-    setTotalCounter(0);
-    setTotalWidget(0);
-    setTotalTimer('00:00:00');
     setShowModalActive(false);
     setDefaultShout('');
-  };
-
-  const getFinalTotalJustSayLength = (temp) => {
-    let getString = '';
-    temp
-      .filter((data) => data.type === 'JustSay' || data.type === 'JustShout')
-      .map((data) => {
-        getString = getString + data.value;
-      });
-    return getString.length;
-  };
-
-  const getFinalToTalTimerOrCounter = (temp, type) => {
-    let getTimer = temp
-      .filter((data) => data.type === type)
-      .map((data) => data.value);
-    if (getTimer.length != 0) {
-      getTimer = getTimer.reduce((prev, next) => prev + next);
-    } else {
-      getTimer = 0;
-    }
-    return getTimer;
   };
 
   const handleTypeSetZero = (e) => {
@@ -100,11 +40,9 @@ const ModalSetting = ({ onEdit }) => {
     const inputType = e.target.inputType.value;
     if (inputType === 'counter' && totalCounter !== 0) {
       setZero('counter');
-      setTotalCounter(0);
     }
     if (inputType === 'timer') {
       setZero('timer');
-      setTotalTimer('00:00:00');
     }
     setShowModalActive(false);
   };

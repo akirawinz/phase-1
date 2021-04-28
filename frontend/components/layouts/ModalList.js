@@ -61,7 +61,7 @@ const ModalList = () => {
     setShowModalActive(false);
   };
 
-  const onHandleEdit = (listId, value, type = '', newValue) => {
+  const onHandleEdit = (listId, value, type = '') => {
     const temp = _.cloneDeep(listAllWidgets);
     temp.map((data) => {
       switch (data.type) {
@@ -78,32 +78,6 @@ const ModalList = () => {
     });
     setListAllWidgets(temp);
     setShowModalActive(false);
-  };
-
-  // const onHandleEditCustom = async (listId, value, type = '') => {
-  //   const temp = _.cloneDeep(listAllWidgets);
-  //   const list = { value };
-  //   const method = await searchAns(list);
-  //   temp.map((data) => {
-  //     if (data.id === listId) {
-  //       data.value = value;
-  //       data.method = method;
-  //     }
-  //   });
-  //   setListAllWidgets(temp);
-  //   setShowModalActive(false);
-  // };
-
-  const mapNewCustom = (list, method) => {
-    const temp = _.cloneDeep(listAllWidgets);
-    const mapData = temp.map((data) => {
-      if (data.id === list.id) {
-        return { ...data, method: method };
-      } else {
-        return data;
-      }
-    });
-    setListAllWidgets(mapData);
   };
 
   const onHandleDelete = (listId) => {
@@ -185,7 +159,6 @@ const ModalList = () => {
           onEdit={onHandleEdit}
           handleOnClick={handleOnClick}
           onHandleDelete={onHandleDelete}
-          mapNewCustom={mapNewCustom}
           openInitialModal={openInitialModal}
         />
       </div>

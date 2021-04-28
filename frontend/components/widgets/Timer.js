@@ -6,7 +6,7 @@ import { useRecoilState } from 'recoil';
 import { zeroState } from '../States';
 const Timer = ({ mapNewData, list }) => {
   const [zero, setZero] = useRecoilState(zeroState);
-  const [time, setTime] = useState(0);
+  const [time, setTime] = useState(list.value || 0);
   const [isActive, setIsActive] = useState(false);
   const disabled = time === 0;
 
@@ -25,7 +25,6 @@ const Timer = ({ mapNewData, list }) => {
 
   useEffect(() => {
     if (time % 1000 === 0) mapNewData(list, time);
-    // setTimeout(mapNewData(list, time), 1000);
   }, [time]);
 
   useEffect(() => {
@@ -46,18 +45,16 @@ const Timer = ({ mapNewData, list }) => {
   };
 
   return (
-    <>
-      <div className="text-center">
-        <div className="flex items-center justify-center mt-4 mb-6">
-          <div className="text-5xl mx-7">{getMinSecond(time)}</div>
-        </div>
-        <Button onClick={handleStart}>{!isActive ? 'Start' : 'Pause'}</Button>
-        &nbsp;
-        <Button onClick={stopTimer} disabled={disabled} color={'red'}>
-          Reset
-        </Button>
+    <div className="text-center">
+      <div className="flex items-center justify-center mt-4 mb-6">
+        <div className="text-5xl mx-7">{getMinSecond(time)}</div>
       </div>
-    </>
+      <Button onClick={handleStart}>{!isActive ? 'Start' : 'Pause'}</Button>
+      &nbsp;
+      <Button onClick={stopTimer} disabled={disabled} color={'red'}>
+        Reset
+      </Button>
+    </div>
   );
 };
 

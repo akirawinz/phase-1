@@ -37,7 +37,7 @@ const Counter = ({ list, getNum, mapNewData }) => {
         </PolarButton>
       </div>
       <Button disabled={disabled} onClick={() => setNum(0)}>
-        Reset
+        Set Zero
       </Button>
     </div>
   );

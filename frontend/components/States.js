@@ -1,4 +1,10 @@
-import { atom } from 'recoil';
+import { atom, selector } from 'recoil';
+import getMinSecond from '../helpers/calculateTime';
+import {
+  getFinalToTalTimerOrCounter,
+  getFinalTotalJustSayLength,
+  getDataColdestCity,
+} from '../helpers/calculateTotalWidgets';
 
 export const showModalActiveState = atom({
   key: 'modalActive',
@@ -15,22 +21,47 @@ export const listAllWidgetsState = atom({
   default: [],
 });
 
-export const totalJustSayState = atom({
+export const totalJustSayState = selector({
   key: 'totalJustSay',
-  default: 0,
+  get: ({ get }) => {
+    const listAllWidgets = get(listAllWidgetsState);
+    const total = getFinalTotalJustSayLength(listAllWidgets);
+    return total;
+  },
 });
 
-export const totalCounterState = atom({
+export const totalCounterState = selector({
   key: 'totalCounter',
-  default: 0,
+  get: ({ get }) => {
+    const listAllWidgets = get(listAllWidgetsState);
+    const total = getFinalToTalTimerOrCounter(listAllWidgets, 'counter');
+    return total;
+  },
 });
-export const totalTimerState = atom({
+
+export const totalTimerState = selector({
   key: 'totalTimer',
-  default: '',
+  get: ({ get }) => {
+    const listAllWidgets = get(listAllWidgetsState);
+    const time = getFinalToTalTimerOrCounter(listAllWidgets, 'timer');
+    return getMinSecond(time);
+  },
 });
-export const totalWidgetState = atom({
+
+export const coldestCityState = selector({
+  key: 'coldestCity',
+  get: ({ get }) => {
+    const listAllWidgets = get(listAllWidgetsState);
+    return getDataColdestCity(listAllWidgets);
+  },
+});
+
+export const totalWidgetState = selector({
   key: 'totalWidget',
-  default: 0,
+  get: ({ get }) => {
+    const listAllWidgets = get(listAllWidgetsState);
+    return listAllWidgets.length;
+  },
 });
 export const zeroState = atom({
   key: 'zero',
@@ -45,11 +76,6 @@ export const onRefreshState = atom({
 export const isCustomEditState = atom({
   key: 'isCustom',
   default: true,
-});
-
-export const coldestCityState = atom({
-  key: 'coldestCity',
-  default: '',
 });
 
 export const defaultShoutState = atom({

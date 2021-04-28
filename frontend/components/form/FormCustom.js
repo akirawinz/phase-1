@@ -1,8 +1,6 @@
-import { useState } from 'react';
 import Button from '../Button';
 import { useRecoilState } from 'recoil';
 import { isCustomEditState } from '../States';
-import { GiConsoleController } from 'react-icons/gi';
 
 const FormCustom = ({
   addType,
@@ -19,15 +17,6 @@ const FormCustom = ({
     titleForm = addType ? 'Add ' + '24 Games' : 'Edit ' + '24 Games';
   }
 
-  let arr = [];
-
-  const handleCustom = (e) => {
-    e.preventDefault();
-    const arr = getArr(e);
-    onAdd(arr, 'Custom');
-    // setIsCustom(true);
-  };
-
   const getArr = (e) => {
     const num1 = e.target.num1.value;
     const num2 = e.target.num2.value;
@@ -36,10 +25,18 @@ const FormCustom = ({
     return [num1, num2, num3, num4];
   };
 
+  const handleCustom = (e) => {
+    e.preventDefault();
+    const arr = getArr(e);
+    onAdd(arr, 'Custom');
+    setIsCustom(true);
+  };
+
   const handleEditCustom = (e) => {
     e.preventDefault();
     const arr = getArr(e);
     onEdit(list.id, arr, 'Custom');
+    setIsCustom(true);
   };
 
   return (

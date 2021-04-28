@@ -1,15 +1,6 @@
 import classNames from 'classnames';
-import Button from '../Button';
-import { IoMdClose } from 'react-icons/io';
 
-const Card = ({
-  children,
-  title,
-  currentTime,
-  fullCard = false,
-  setShowEditModal,
-  onClick = () => {},
-}) => {
+const Card = ({ children, title, currentTime, fullCard = false }) => {
   const styled = classNames('md:inner ', {
     'md:w-1/2 pb-4 md:pr-4': !fullCard,
     'my-4': fullCard,
