@@ -9,12 +9,14 @@ const Weather = ({ list, mapNewData }) => {
   const value = list.value;
   const weather = list.weather;
   const icon = weather ? weather.icon : '';
+  console.log(process.env.NEXT_PUBLIC_SECRET_KEY);
 
   const searchWeather = async (value) => {
     const url =
       'https://api.openweathermap.org/data/2.5/weather?q=' +
       value +
-      '&appid=2c486a422a8abed95fca0bbd2c35fc80';
+      '&appid=' +
+      process.env.NEXT_PUBLIC_SECRET_KEY;
     try {
       const { data } = await axios.get(url);
       const temp = parseInt(data.main.temp - 273);
