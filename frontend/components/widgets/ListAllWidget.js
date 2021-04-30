@@ -1,19 +1,20 @@
 import { useRecoilState } from 'recoil';
+import _ from 'lodash';
+import { useEffect } from 'react';
 import { MdEdit } from 'react-icons/md';
 import { IoMdClose } from 'react-icons/io';
 import { MdRefresh } from 'react-icons/md';
-import _ from 'lodash';
 import FormInputText from '../form/FormInputText';
 import Card from '../../components/template/Card';
 import CardNone from '../template/CardNone';
 import JustSay from '../../components/widgets/JustSay';
+import FormCustom from '../form/FormCustom';
 import Weather from '../../components/widgets/Weather';
 import Counter from '../../components/widgets/Counter';
 import Custom from '../../components/widgets/Custom';
 import Timer from '../../components/widgets/Timer';
 import Button from '../Button';
 import CurrentDate from '../../helpers/currentDate';
-
 import {
   listAllWidgetsState,
   showModalActiveState,
@@ -44,25 +45,25 @@ const ListAllWidget = ({
   const [showModalContent, setShowModalContent] = useRecoilState(
     showModalContentState
   );
-  // useEffect(() => {
-  //   if (listAllWidgets.length > 0) {
-  //     localStorage.setItem('listAllWidgets', JSON.stringify(listAllWidgets));
-  //     localStorage.setItem('defaultShout', JSON.stringify(defaultShout));
-  //   }
-  // }, [listAllWidgets]);
+  useEffect(() => {
+    if (listAllWidgets.length > 0) {
+      localStorage.setItem('listAllWidgets', JSON.stringify(listAllWidgets));
+      localStorage.setItem('defaultShout', JSON.stringify(defaultShout));
+    }
+  }, [listAllWidgets]);
 
-  // useEffect(() => {
-  //   let localStorageListAllWidget = localStorage.getItem('listAllWidgets');
-  //   localStorageListAllWidget = JSON.parse(localStorageListAllWidget);
-  //   let localStorageDefaultShout = localStorage.getItem('defaultShout');
-  //   localStorageDefaultShout = JSON.parse(localStorageDefaultShout);
-  //   if (localStorageListAllWidget) {
-  //     if (localStorageListAllWidget.length > 0) {
-  //       setListAllWidgets(localStorageListAllWidget);
-  //       setDefaultShout(localStorageDefaultShout);
-  //     }
-  //   }
-  // }, []);
+  useEffect(() => {
+    let localStorageListAllWidget = localStorage.getItem('listAllWidgets');
+    localStorageListAllWidget = JSON.parse(localStorageListAllWidget);
+    let localStorageDefaultShout = localStorage.getItem('defaultShout');
+    localStorageDefaultShout = JSON.parse(localStorageDefaultShout);
+    if (localStorageListAllWidget) {
+      if (localStorageListAllWidget.length > 0) {
+        setListAllWidgets(localStorageListAllWidget);
+        setDefaultShout(localStorageDefaultShout);
+      }
+    }
+  }, []);
   const handleEditOnClick = (type, addType = true, listId = 0, list) => {
     if (type === 'JustSay' || type === 'JustShout') {
       setShowModalContent(
@@ -90,13 +91,7 @@ const ListAllWidget = ({
     }
     if (type === 'Custom') {
       setShowModalContent(
-        <FormCustom
-          type={type}
-          onAdd={onAddListAllWidgetState}
-          addType={addType}
-          // onEdit={onEdit}
-          list={list}
-        />
+        <FormCustom type={type} onEdit={onEdit} addType={addType} list={list} />
       );
     }
   };

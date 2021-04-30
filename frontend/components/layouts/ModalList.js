@@ -1,3 +1,5 @@
+import _ from 'lodash';
+import { useRecoilState } from 'recoil';
 import { useState } from 'react';
 import { RiAddCircleLine } from 'react-icons/ri';
 import { BiBomb } from 'react-icons/bi';
@@ -6,9 +8,6 @@ import Modal from '../Modal';
 import AddWidgetPanel from '../layouts/AddWidgetPanel';
 import ModalSetting from '../template/ModalSetting';
 import ListAllWidget from '../widgets/ListAllWidget';
-import _ from 'lodash';
-//recoil
-import { useRecoilState } from 'recoil';
 import {
   showModalContentState,
   showModalActiveState,

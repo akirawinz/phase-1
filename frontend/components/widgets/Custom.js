@@ -22,13 +22,6 @@ const Custom = ({ list, mapNewData }) => {
     }
   };
 
-  // const prevArr = useRef();
-  // useEffect(() => {
-  //   if (JSON.stringify(prevArr.current) !== JSON.stringify(arr)) {
-  //     prevArr.current = [...arr];
-  //   }
-  // }, [list.value]);
-
   useEffect(async () => {
     if (isCustom) {
       const method = await searchAns(list);
