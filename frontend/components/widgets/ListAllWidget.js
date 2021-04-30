@@ -1,8 +1,9 @@
 import { useRecoilState } from 'recoil';
 import { MdEdit } from 'react-icons/md';
 import { IoMdClose } from 'react-icons/io';
+import { MdRefresh } from 'react-icons/md';
 import _ from 'lodash';
-import { useEffect } from 'react';
+import FormInputText from '../form/FormInputText';
 import Card from '../../components/template/Card';
 import CardNone from '../template/CardNone';
 import JustSay from '../../components/widgets/JustSay';
@@ -12,19 +13,20 @@ import Custom from '../../components/widgets/Custom';
 import Timer from '../../components/widgets/Timer';
 import Button from '../Button';
 import CurrentDate from '../../helpers/currentDate';
-import { MdRefresh } from 'react-icons/md';
+
 import {
   listAllWidgetsState,
   showModalActiveState,
   onRefreshState,
   zeroState,
   defaultShoutState,
+  showModalContentState,
 } from '../States';
 
 const ListAllWidget = ({
+  onEdit,
   onHandleDelete,
   openInitialModal,
-  handleOnClick,
   searchAns,
 }) => {
   const [listAllWidgets, setListAllWidgets] = useRecoilState(
@@ -34,15 +36,14 @@ const ListAllWidget = ({
     showModalActiveState
   );
   const [defaultShout, setDefaultShout] = useRecoilState(defaultShoutState);
-
   const [zero, setZero] = useRecoilState(zeroState);
-
   const getAllListWidgets = listAllWidgets.slice().sort((a, b) => {
     return b.id - a.id;
   });
-
   const [onRefresh, setOnRefresh] = useRecoilState(onRefreshState);
-
+  const [showModalContent, setShowModalContent] = useRecoilState(
+    showModalContentState
+  );
   // useEffect(() => {
   //   if (listAllWidgets.length > 0) {
   //     localStorage.setItem('listAllWidgets', JSON.stringify(listAllWidgets));
@@ -62,6 +63,43 @@ const ListAllWidget = ({
   //     }
   //   }
   // }, []);
+  const handleEditOnClick = (type, addType = true, listId = 0, list) => {
+    if (type === 'JustSay' || type === 'JustShout') {
+      setShowModalContent(
+        <FormInputText
+          onEdit={onEdit}
+          addType={addType}
+          listId={listId}
+          list={list}
+          defaultValue={defaultShout}
+          type={type}
+        />
+      );
+    }
+
+    if (type === 'Weather') {
+      setShowModalContent(
+        <FormInputText
+          onEdit={onEdit}
+          addType={addType}
+          listId={listId}
+          list={list}
+          type={type}
+        />
+      );
+    }
+    if (type === 'Custom') {
+      setShowModalContent(
+        <FormCustom
+          type={type}
+          onAdd={onAddListAllWidgetState}
+          addType={addType}
+          // onEdit={onEdit}
+          list={list}
+        />
+      );
+    }
+  };
 
   const mapNewData = (list, value) => {
     const temp = _.cloneDeep(listAllWidgets);
@@ -82,7 +120,6 @@ const ListAllWidget = ({
             return data;
           }
           break;
-
         case 'timer':
           if (zero === 'timer' && data.type === 'timer') {
             setZero('');
@@ -95,7 +132,17 @@ const ListAllWidget = ({
           }
 
           break;
-
+        case 'counter':
+          if (zero === 'counter' && data.type === 'counter') {
+            setZero('');
+            return { ...data, value: 0 };
+          }
+          if (data.id === list.id) {
+            return { ...data, value };
+          } else {
+            return data;
+          }
+          break;
         default:
           if (data.id === list.id) {
             return { ...data, value };
@@ -128,7 +175,7 @@ const ListAllWidget = ({
         <Button
           icon={true}
           onClick={() => {
-            handleOnClick(list.type, false, list.id, list);
+            handleEditOnClick(list.type, false, list.id, list);
             setShowModalActive(true);
           }}
         >
@@ -175,17 +222,11 @@ const ListAllWidget = ({
             </Card>
           );
           break;
-
         case 'timer':
           return (
             <Card title="Timer" key={list.id}>
               {buttonDeleteAndEdit(list)}
-              <Timer
-                listAllWidgets={listAllWidgets}
-                list={list}
-                mapNewData={mapNewData}
-                setListAllWidgets={setListAllWidgets}
-              />
+              <Timer list={list} mapNewData={mapNewData} />
             </Card>
           );
           break;

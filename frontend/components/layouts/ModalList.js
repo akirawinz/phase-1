@@ -1,15 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { RiAddCircleLine } from 'react-icons/ri';
 import { BiBomb } from 'react-icons/bi';
 import Button from '../Button';
 import Modal from '../Modal';
-import WidgetModalList from '../layouts/WidgetModalList';
+import AddWidgetPanel from '../layouts/AddWidgetPanel';
 import ModalSetting from '../template/ModalSetting';
 import ListAllWidget from '../widgets/ListAllWidget';
-import GetJson from '../../helpers/getJsonFormat';
-import FormInputText from '../form/FormInputText';
-import FormCounter from '../form/FormCounter';
-import FormCustom from '../form/FormCustom';
 import _ from 'lodash';
 //recoil
 import { useRecoilState } from 'recoil';
@@ -35,30 +31,12 @@ const ModalList = () => {
 
   const openInitialModal = () => {
     setShowModalActive(true);
-    setShowModalContent(<WidgetModalList handleOnClick={handleOnClick} />);
+    setShowModalContent(<AddWidgetPanel />);
   };
 
   const openSettingModal = () => {
     setShowModalActive(true);
     setShowModalContent(<ModalSetting onEdit={onHandleEdit}></ModalSetting>);
-  };
-
-  const onAddListAllWidgetState = (value = '', type) => {
-    const getData = GetJson(value, type);
-    if (type === 'JustShout' && listAllWidgets.length > 0) {
-      const temp = _.cloneDeep(listAllWidgets);
-      temp.map((data) => {
-        if (data.type === 'JustShout') {
-          setDefaultShout(value);
-          data.value = value;
-        }
-      });
-      setListAllWidgets([...temp, getData]);
-    } else {
-      setListAllWidgets([...listAllWidgets, getData]);
-    }
-
-    setShowModalActive(false);
   };
 
   const onHandleEdit = (listId, value, type = '') => {
@@ -88,51 +66,6 @@ const ModalList = () => {
     setListAllWidgets(newData);
   };
 
-  const handleOnClick = (type, addType = true, listId = 0, list) => {
-    if (type === 'JustSay' || type === 'JustShout') {
-      setShowModalContent(
-        <FormInputText
-          onAdd={onAddListAllWidgetState}
-          onEdit={onHandleEdit}
-          addType={addType}
-          listId={listId}
-          list={list}
-          defaultValue={defaultShout}
-          type={type}
-        />
-      );
-    }
-    if (type === 'counter') {
-      setShowModalContent(<FormCounter onAdd={onAddListAllWidgetState} />);
-    }
-    if (type === 'timer') {
-      onAddListAllWidgetState('', 'timer');
-    }
-    if (type === 'Weather') {
-      setShowModalContent(
-        <FormInputText
-          onAdd={onAddListAllWidgetState}
-          onEdit={onHandleEdit}
-          addType={addType}
-          listId={listId}
-          list={list}
-          type={type}
-        />
-      );
-    }
-    if (type === 'Custom') {
-      setShowModalContent(
-        <FormCustom
-          type={type}
-          onAdd={onAddListAllWidgetState}
-          addType={addType}
-          onEdit={onHandleEdit}
-          list={list}
-        />
-      );
-    }
-  };
-
   const showDataModals = () => {
     return (
       <Modal show={showModalActive} onCancel={() => setShowModalActive(false)}>
@@ -157,7 +90,6 @@ const ModalList = () => {
       <div className="md:flex md:flex-wrap md:-mr-4">
         <ListAllWidget
           onEdit={onHandleEdit}
-          handleOnClick={handleOnClick}
           onHandleDelete={onHandleDelete}
           openInitialModal={openInitialModal}
         />

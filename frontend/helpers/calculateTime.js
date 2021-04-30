@@ -15,5 +15,4 @@ const calculateTime = (ts, mod, getTime) => {
 const computedTime = (getTime) => {
   return String(getTime).length === 1 ? `0${getTime}` : getTime;
 };
-
 export default getMinSecond;
