@@ -45,25 +45,25 @@ const ListAllWidget = ({
   const [showModalContent, setShowModalContent] = useRecoilState(
     showModalContentState
   );
-  useEffect(() => {
-    if (listAllWidgets.length > 0) {
-      localStorage.setItem('listAllWidgets', JSON.stringify(listAllWidgets));
-      localStorage.setItem('defaultShout', JSON.stringify(defaultShout));
-    }
-  }, [listAllWidgets]);
-
-  useEffect(() => {
-    let localStorageListAllWidget = localStorage.getItem('listAllWidgets');
-    localStorageListAllWidget = JSON.parse(localStorageListAllWidget);
-    let localStorageDefaultShout = localStorage.getItem('defaultShout');
-    localStorageDefaultShout = JSON.parse(localStorageDefaultShout);
-    if (localStorageListAllWidget) {
-      if (localStorageListAllWidget.length > 0) {
-        setListAllWidgets(localStorageListAllWidget);
-        setDefaultShout(localStorageDefaultShout);
-      }
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (listAllWidgets.length > 0) {
+  //     localStorage.setItem('listAllWidgets', JSON.stringify(listAllWidgets));
+  //     localStorage.setItem('defaultShout', JSON.stringify(defaultShout));
+  //   }
+  // }, [listAllWidgets]);
+  //
+  // useEffect(() => {
+  //   let localStorageListAllWidget = localStorage.getItem('listAllWidgets');
+  //   localStorageListAllWidget = JSON.parse(localStorageListAllWidget);
+  //   let localStorageDefaultShout = localStorage.getItem('defaultShout');
+  //   localStorageDefaultShout = JSON.parse(localStorageDefaultShout);
+  //   if (localStorageListAllWidget) {
+  //     if (localStorageListAllWidget.length > 0) {
+  //       setListAllWidgets(localStorageListAllWidget);
+  //       setDefaultShout(localStorageDefaultShout);
+  //     }
+  //   }
+  // }, []);
   const handleEditOnClick = (type, addType = true, listId = 0, list) => {
     if (type === 'JustSay' || type === 'JustShout') {
       setShowModalContent(

@@ -7,7 +7,7 @@ const Custom = ({ list, mapNewData }) => {
   const [isCustom, setIsCustom] = useRecoilState(isCustomEditState);
   const [allData, setAllData] = useState([]);
 
-  const searchAns = async (list) => {
+  const searchAns = async list => {
     const url = 'http://localhost:3333/api/test';
     let payload = {
       data: list.value,
@@ -32,7 +32,6 @@ const Custom = ({ list, mapNewData }) => {
   }, [list.value]);
 
   const displayInput = () => {
-    console.log(list);
     if (list) {
       return list.value.map((data, index) => {
         return (
@@ -45,7 +44,7 @@ const Custom = ({ list, mapNewData }) => {
   };
 
   const answer = () => {
-    if (allData.length > 0) {
+    if (allData && allData.length > 0) {
       return allData.map((data, index) => {
         return (
           <div key={index}>

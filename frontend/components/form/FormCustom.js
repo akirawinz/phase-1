@@ -35,6 +35,7 @@ const FormCustom = ({
   const handleEditCustom = (e) => {
     e.preventDefault();
     const arr = getArr(e);
+    console.log(arr)
     onEdit(list.id, arr, 'Custom');
     setIsCustom(true);
   };
